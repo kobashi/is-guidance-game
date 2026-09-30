@@ -1,0 +1,50 @@
+# main に push（プルリクエストのマージを含む）されたら、data/ の JSON を確認してから GitHub Pages に公開する。
+# プルリクエストでは JSON の確認だけを行う（公開はしない）。
+# 初回のみ：リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にしておくこと。
+
+name: Pages に公開
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: # Actions 画面から手動でも公開できる
+
+permissions:
+  contents: read
+
+# 公開が重なったときは、後から来たものを待たせる（途中の公開は中断しない）
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: data の JSON を確認
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tools/check-data.mjs
+
+  deploy:
+    name: GitHub Pages に公開
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

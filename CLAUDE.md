@@ -32,7 +32,7 @@
 |---|---|
 | 構成 | 素の HTML / CSS / JavaScript（ES Modules）。ビルド工程なし |
 | 外部依存 | CDN・外部ライブラリ・外部フォント・外部APIは使わない（学内ネットワークや通信状況に左右されないため） |
-| 公開 | GitHub Pages（main ブランチのルートを公開） |
+| 公開 | GitHub Pages（main への push で GitHub Actions が data/ の JSON を確認してから自動公開。`.github/workflows/pages.yml`） |
 | パス | すべて相対パスで書く（Pages は `https://<user>.github.io/<repo>/` のサブパスで公開されるため） |
 | 保存 | 進行状況は localStorage に保存。読み書きは try/catch で囲み、失敗してもゲームは続行できること |
 | 個人情報 | 名前・学籍番号などは一切入力させない・送信しない。サーバー通信はしない |
