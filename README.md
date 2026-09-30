@@ -3,6 +3,9 @@
 名古屋文理大学 情報メディア学科の1年生が、コース選択の前に「情報システムコースで何を学ぶか」を
 スマホで遊びながら理解するための Web ゲームです。コースガイダンスの最後に QR コードで案内します。
 
+**公開URL：[https://kobashi.github.io/is-guidance-game/](https://kobashi.github.io/is-guidance-game/)**
+（デバッグ画面：[?debug=1#/debug](https://kobashi.github.io/is-guidance-game/?debug=1#/debug)）
+
 - 素の HTML / CSS / JavaScript のみ（ビルド工程・外部ライブラリ・外部通信なし）
 - 名前などの入力はなく、進行状況は各自の端末（localStorage）にだけ保存されます
 - 効果音と BGM はすべて Web Audio API で実行時に合成しています（音源ファイルなし）
@@ -21,7 +24,7 @@ main に push（プルリクエストのマージを含む）すると、GitHub 
 1. GitHub のリポジトリページで **Settings → Pages** を開く
 2. **Build and deployment** の Source を **GitHub Actions** にする
 3. 以後は main への push で自動的に公開される。設定より前の push で公開されていないときは、**Actions** タブ →「Pages に公開」→ **Run workflow** で手動実行する
-4. 数分後、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開される（Actions の実行結果と Settings → Pages に URL が表示される）
+4. 数分後、[https://kobashi.github.io/is-guidance-game/](https://kobashi.github.io/is-guidance-game/) で公開される（Actions の実行結果と Settings → Pages にも URL が表示される）
 
 - JSON に間違いがあると「data の JSON を確認」が失敗し、**公開されません**（前の版が表示されたまま）。Actions タブで赤くなった実行を開くと、どのファイルの何が問題かが表示されます。
 - プルリクエストでは JSON の確認だけが行われ、公開はされません。

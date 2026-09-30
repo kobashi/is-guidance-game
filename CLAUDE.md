@@ -34,7 +34,7 @@
 |---|---|
 | 構成 | 素の HTML / CSS / JavaScript（ES Modules）。ビルド工程なし |
 | 外部依存 | CDN・外部ライブラリ・外部フォント・外部APIは使わない（学内ネットワークや通信状況に左右されないため） |
-| 公開 | GitHub Pages（main への push で GitHub Actions が data/ の JSON を確認してから自動公開。`.github/workflows/pages.yml`） |
+| 公開 | GitHub Pages（https://kobashi.github.io/is-guidance-game/ 。main への push で GitHub Actions が data/ の JSON を確認してから自動公開。`.github/workflows/pages.yml`） |
 | パス | すべて相対パスで書く（Pages は `https://<user>.github.io/<repo>/` のサブパスで公開されるため） |
 | 保存 | 進行状況は localStorage に保存。読み書きは try/catch で囲み、失敗してもゲームは続行できること |
 | 個人情報 | 名前・学籍番号などは一切入力させない・送信しない。サーバー通信はしない |
@@ -235,7 +235,6 @@ M2〜M5 は、M1 と M1.5 の完了後であれば別々のセッションで並
 
 ## 9. 未決事項（決まり次第このファイルを更新する）
 
-- 公開URL（リポジトリ名）
 - curriculum.json のスキル配分・1年で取れる科目数・進路例（科目データ自体は超履修計画2026から転記済み）
 - bugs.json の問題の最終確認（難易度と言語の配分）
 - エンディングのリンク先URLの確定
