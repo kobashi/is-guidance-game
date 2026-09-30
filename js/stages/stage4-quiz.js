@@ -73,6 +73,7 @@ export async function mount(root, ctx) {
   }
 
   function showSummary() {
+    ctx.markCleared();
     const S = data.summary;
     audio.setIntensity(2);
     audio.play('levelup');

@@ -1,6 +1,7 @@
 // ステージ3：履修ダンジョン
 // 1〜4年次を部屋に見立て、科目カードを選んで進む。選んだ科目でスキルが伸びる。
 // その年の必修を取っていないと扉が開かない。前提科目を取っていない科目は選べない。
+// 他コースの科目も並べる。どれが必修かは最初は見せず、扉が開かなかった後にヒントとして印を付ける。
 // 4年次の卒業の扉を抜けたら、伸びたスキルから進路・卒業研究の例を表示してクリア。
 // データは data/curriculum.json。
 
@@ -21,6 +22,9 @@ export async function mount(root, ctx) {
   const selected = new Set();
   let year = 1;
   let mistakes = 0;
+  let hintShown = false; // 扉が開かなかった後、必修の印を表示する
+  const COURSE_ORDER = ['common', 'is', 'movie', 'sound', 'design'];
+  const courseRank = (s) => { const i = COURSE_ORDER.indexOf(s.course); return i < 0 ? COURSE_ORDER.length : i; };
 
   const isRequired = (s) => s.kind !== 'elective';
   const before = (a, b) => a.year < b.year || (a.year === b.year && a.term === '前' && b.term === '後');
@@ -74,10 +78,13 @@ export async function mount(root, ctx) {
     const msg = el('div', { class: 's3-message', role: 'status', 'aria-live': 'polite' });
     if (message) msg.append(message);
 
-    const cards = (term) => list.filter((s) => s.term === term).map((s) => card(s, msg));
+    const cards = (term) => list.filter((s) => s.term === term)
+      .sort((a, b) => courseRank(a) - courseRank(b))
+      .map((s) => card(s, msg));
     const doorBtn = el('button', { type: 'button', class: 'btn btn-big s3-door', 'data-sfx': 'none', onclick: () => openDoor(doorBtn, msg) },
       year < lastYear ? fmt(U.door, { year: year + 1 }) : U.graduate);
 
+    room.classList.toggle('show-kind', hintShown);
     room.replaceChildren(...[
       el('div', { class: 's3-room-head' },
         el('h2', { class: 's3-room-title', text: fmt(U.roomTitle, { year }) }),
@@ -109,7 +116,9 @@ export async function mount(root, ctx) {
       onclick: (e) => toggle(s, e.currentTarget, msg),
     },
     el('span', { class: 's3-card-top' },
-      el('span', { class: `s3-kind kind-${s.kind}`, text: U.kind[s.kind] }),
+      el('span', { class: 's3-badges' },
+        el('span', { class: `s3-course course-${s.course}`, text: U.courses?.[s.course] ?? '' }),
+        hintShown && isRequired(s) ? el('span', { class: `s3-kind kind-${s.kind}`, text: U.kind[s.kind] }) : null),
       el('span', { class: 's3-check', 'aria-hidden': 'true', text: on ? '✔' : '' })),
     el('span', { class: 's3-name', text: s.name }),
     locked
@@ -135,9 +144,12 @@ export async function mount(root, ctx) {
     }
     const max = maxPicks[year] ?? Infinity;
     if (picksIn(year) >= max) {
+      // 上限はゲーム用のルールなので、そのことをはっきり伝える
       audio.play('wrong');
       fx.shake(btn);
+      fx.pop(room.querySelector('.s3-picks'));
       msg.replaceChildren(el('p', { class: 's3-warn', text: fmt(U.full, { max }) }));
+      msg.scrollIntoView({ block: 'nearest', behavior: fx.reducedMotion() ? 'auto' : 'smooth' });
       return;
     }
     selected.add(s.id);
@@ -178,7 +190,6 @@ export async function mount(root, ctx) {
     if (missing.length) {
       mistakes += 1;
       audio.play('door', { locked: true });
-      fx.shake(doorBtn, { big: true });
       const lines = [el('p', { class: 's3-warn', text: fmt(U.doorLocked, { names: missing.map((s) => s.name).join('」「') }) })];
       // 前の年に取るべきだった前提科目が原因なら、戻る道を示す
       let backTo = null;
@@ -191,8 +202,13 @@ export async function mount(root, ctx) {
       if (backTo) {
         lines.push(el('button', { type: 'button', class: 'btn btn-secondary', onclick: () => moveTo(backTo) }, fmt(U.goBack, { year: backTo })));
       }
-      msg.replaceChildren(...lines);
-      msg.scrollIntoView({ block: 'nearest', behavior: fx.reducedMotion() ? 'auto' : 'smooth' });
+      // 間違えた後のヒント：必修の科目に印を付ける
+      if (!hintShown && U.hintShown) lines.push(el('p', { class: 's3-hint', text: U.hintShown }));
+      hintShown = true;
+      renderRoom(el('div', { class: 's3-lines' }, lines));
+      const box = room.querySelector('.s3-message');
+      box?.scrollIntoView({ block: 'nearest', behavior: fx.reducedMotion() ? 'auto' : 'smooth' });
+      fx.shake(room.querySelector('.s3-door'), { big: true });
       return;
     }
     audio.play('door');
@@ -205,6 +221,7 @@ export async function mount(root, ctx) {
   // ---- 卒業（結果）
 
   function graduate() {
+    ctx.markCleared({ mistakes });
     const R = U.result;
     const t = skillTotals();
     const ranked = skills.filter((k) => t[k.id] > 0).sort((a, b) => t[b.id] - t[a.id]);

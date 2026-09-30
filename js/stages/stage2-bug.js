@@ -111,6 +111,7 @@ export async function mount(root, ctx) {
       fx.pop(stars[correct - 1]);
 
       const last = correct >= required;
+      if (last) ctx.markCleared({ mistakes });
       const nextBtn = el('button', {
         type: 'button',
         class: 'btn btn-big',

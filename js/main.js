@@ -354,6 +354,14 @@ function createStageContext(n, token) {
      *   seconds : かかった秒数（省略時は自動で計測）
      *   rank    : ランクを直接指定したいとき（'S' など）
      */
+    /**
+     * クリア条件を満たした瞬間に呼ぶ（演出の途中で画面を離れても、クリアと次のステージの解放を記録するため）。
+     * ランク表示などの演出は、そのあと complete() で行う。
+     */
+    markCleared(result = {}) {
+      if (token !== renderToken) return;
+      recordClear(n, result);
+    },
     complete(result = {}) {
       if (done || token !== renderToken) return Promise.resolve();
       done = true;
@@ -374,13 +382,19 @@ function createStageContext(n, token) {
   return ctx;
 }
 
-async function finishStage(n, result, token) {
-  const C = ui.clear;
+/** クリアを記録して（次のステージが解放される）、ランクを返す */
+function recordClear(n, result = {}) {
   const mistakes = Number.isFinite(result.mistakes) ? result.mistakes : 0;
   const rank = result.rank ?? rankFor(mistakes);
   progress.cleared[n - 1] = true;
   progress.ranks[n - 1] = betterRank(progress.ranks[n - 1], rank);
   saveProgress();
+  return rank;
+}
+
+async function finishStage(n, result, token) {
+  const C = ui.clear;
+  const rank = recordClear(n, result);
   fx.pop(document.querySelector(`.pip[data-stage="${n}"]`));
 
   audio.play('clear');

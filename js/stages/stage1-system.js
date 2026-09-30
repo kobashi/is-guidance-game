@@ -219,6 +219,8 @@ export async function mount(root, ctx) {
   function succeed() {
     solved = true;
     running = false;
+    ctx.markCleared({ mistakes }); // 全部品が正しくつながった＝クリア条件。この後の「1つ外す」は体験
+
     goalEnd.classList.add('is-on');
     screen.classList.add('is-live');
     status.textContent = data.success.status;
