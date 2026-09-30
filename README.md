@@ -26,6 +26,7 @@ main に push（プルリクエストのマージを含む）すると、GitHub 
 3. 以後は main への push で自動的に公開される。設定より前の push で公開されていないときは、**Actions** タブ →「Pages に公開」→ **Run workflow** で手動実行する
 4. 数分後、[https://kobashi.github.io/is-guidance-game/](https://kobashi.github.io/is-guidance-game/) で公開される（Actions の実行結果と Settings → Pages にも URL が表示される）
 
+- 公開のたびに、JS と CSS の URL に `?v=（コミットID）` が自動で付きます（スマホに古いファイルが残って更新が反映されないのを防ぐため）。それでも古い表示のままなら、ページを再読み込みしてください（`index.html` 自体は最大10分ほどキャッシュされます）。
 - JSON に間違いがあると「data の JSON を確認」が失敗し、**公開されません**（前の版が表示されたまま）。Actions タブで赤くなった実行を開くと、どのファイルの何が問題かが表示されます。
 - プルリクエストでは JSON の確認だけが行われ、公開はされません。
 - main にマージした内容がそのまま公開されます。ガイダンス当日までは URL を配らないでください。
