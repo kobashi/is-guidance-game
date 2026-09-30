@@ -1,6 +1,7 @@
 // ステージ1：システム分解パズル
-// 部品をタップして順番に並べ、「電源オン」で信号を流す。
+// 部品をタップして順番に並べ、「配信スタート」で信号を流す。
 // 欠けていたり順番が違ったりすると、そこで信号が止まり、アバターは動かない。
+// 全部つながってアバターが動いたら、「部品を1つ外してみよう」。どれを外しても配信事故で止まる。
 // データは data/system.json（parts は正しい順に書く）。
 
 const AVATAR_SVG = `
@@ -38,6 +39,7 @@ export async function mount(root, ctx) {
   let mistakes = 0;
   let running = false;
   let solved = false;
+  let breakable = false; // クリア後の「部品を1つ外してみよう」の間だけ true
   let alive = true;
   const timers = new Set();
   const wait = (ms) => new Promise((resolve) => {
@@ -71,6 +73,7 @@ export async function mount(root, ctx) {
   const runBtn = el('button', { type: 'button', class: 'btn btn-big s1-run', 'data-sfx': 'none', onclick: run }, data.run);
   const resetBtn = el('button', { type: 'button', class: 'btn btn-ghost', onclick: resetAll }, data.reset);
   const controls = el('div', { class: 'actions' }, message, runBtn, resetBtn);
+  let panel = null; // クリア後のメッセージ欄
 
   root.append(screen, el('p', { class: 's1-intro', text: data.intro }), tray, chain, controls);
   render();
@@ -88,6 +91,10 @@ export async function mount(root, ctx) {
   }
 
   function removeAt(i) {
+    if (breakable && slots[i] != null) {
+      breakAt(i);
+      return;
+    }
     if (running || solved || slots[i] == null) return;
     slots[i] = null;
     clearMarks();
@@ -109,7 +116,7 @@ export async function mount(root, ctx) {
   }
 
   function render() {
-    const busy = running || solved;
+    const busy = running || (solved && !breakable);
     slotBtns.forEach((b, i) => {
       const p = slots[i] == null ? null : parts[slots[i]];
       b.replaceChildren(...[
@@ -124,10 +131,11 @@ export async function mount(root, ctx) {
     trayBtns.forEach((b, pi) => {
       const used = slots.includes(pi);
       b.classList.toggle('is-used', used);
-      b.disabled = busy || used;
+      b.disabled = running || solved || used;
     });
-    runBtn.disabled = busy || slots.every((s) => s == null);
-    resetBtn.disabled = busy || slots.every((s) => s == null);
+    runBtn.disabled = running || solved || slots.every((s) => s == null);
+    resetBtn.disabled = running || solved || slots.every((s) => s == null);
+    chain.classList.toggle('is-breakable', breakable);
     if (!solved) audio.setIntensity(slots.every((s) => s != null) ? 1 : 0);
   }
 
@@ -173,7 +181,6 @@ export async function mount(root, ctx) {
   function succeed() {
     solved = true;
     running = false;
-    render();
     goalEnd.classList.add('is-on');
     screen.classList.add('is-live');
     status.textContent = data.success.status;
@@ -183,13 +190,40 @@ export async function mount(root, ctx) {
     fx.celebrate('correct', screen);
     fx.confetti({ y: 0.25, count: 70 });
 
+    // 次は「部品を1つ外してみよう」：どれを外しても全体が止まることを体験させる
     const S = data.success;
-    const kanji = el('p', { class: 's1-kanji', text: S.kanji });
-    const next = el('button', { type: 'button', class: 'btn btn-big', 'data-sfx': 'none', onclick: () => ctx.complete({ mistakes }) }, S.next);
-    const panel = el('div', { class: 's1-success', role: 'status' }, kanji, el('p', { text: S.message }), next);
+    const headline = el('p', { class: 's1-headline', text: S.headline });
+    panel = el('div', { class: 's1-success', role: 'status' }, headline, el('p', { class: 's1-try', text: S.tryBreak }));
     tray.replaceWith(panel);
     controls.hidden = true;
-    fx.slam(kanji);
+    breakable = true;
+    render();
+    fx.slam(headline);
+    panel.scrollIntoView({ block: 'nearest', behavior: fx.reducedMotion() ? 'auto' : 'smooth' });
+  }
+
+  function breakAt(i) {
+    const S = data.success;
+    breakable = false;
+    slots[i] = null;
+    render();
+    // 外した部品より先には信号が届かない
+    slotBtns.forEach((b, j) => { if (j >= i) b.classList.remove('is-on'); });
+    slotBtns[i].classList.add('is-stop');
+    goalEnd.classList.remove('is-on');
+    screen.classList.remove('is-live');
+    screen.classList.add('is-broken');
+    status.textContent = S.brokenStatus;
+    audio.setIntensity(0);
+    audio.play('wrong');
+    fx.shake(undefined, { big: true });
+    fx.floatText('✖', slotBtns[i], { className: 'fx-float-ng' });
+
+    const headline = el('p', { class: 's1-headline is-broken', text: S.brokenHeadline });
+    const next = el('button', { type: 'button', class: 'btn btn-big', 'data-sfx': 'none', onclick: () => ctx.complete({ mistakes }) }, S.next);
+    panel.classList.add('is-broken');
+    panel.replaceChildren(headline, el('p', { text: S.message }), next);
+    fx.pop(headline);
     panel.scrollIntoView({ block: 'nearest', behavior: fx.reducedMotion() ? 'auto' : 'smooth' });
   }
 
