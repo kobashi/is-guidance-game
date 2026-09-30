@@ -372,7 +372,15 @@ async function finishStage(n, result, token) {
 
 function showEnding() {
   const E = ui.ending;
-  const honor = el('p', { class: 'honor', text: E.honor });
+  const points = { S: 3, A: 2, B: 1, C: 1 };
+  const score = progress.ranks.reduce((sum, r) => sum + (points[r] ?? 0), 0);
+  const tier = (E.honors ?? []).find((h) => score >= h.min);
+  const honor = el('p', { class: 'honor', text: tier?.title ?? E.honor });
+  const ranks = el('ul', { class: 'ending-ranks', 'aria-label': E.ranksLabel },
+    ui.stages.map((s, i) => {
+      const r = progress.ranks[i];
+      return el('li', {}, fmt(ui.map.stageLabel, { n: i + 1 }), r ? el('span', { class: `rank-chip rank-${r}`, text: r }) : '-');
+    }));
   const linkItems = (links?.links ?? []).map((l) =>
     el('li', {},
       el('a', { class: 'link-card', href: l.url, target: '_blank', rel: 'noopener', 'data-sfx': 'tap' },
@@ -383,6 +391,7 @@ function showEnding() {
     el('h1', { class: 'ending-title', text: E.heading }),
     el('p', { class: 'honor-label', text: E.honorLabel }),
     honor,
+    ranks,
     el('p', { class: 'ending-message', text: E.message }),
     el('h2', { class: 'section-title', text: E.linksHeading }),
     el('ul', { class: 'link-list' }, linkItems),

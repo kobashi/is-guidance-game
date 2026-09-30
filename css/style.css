@@ -186,6 +186,8 @@ h1, h2, h3, p {
   margin: 0 auto;
   padding: 20px calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 32px) calc(env(safe-area-inset-left) + 16px);
   outline: none;
+  /* 演出で一瞬はみ出しても、スマホで画面全体が横に広がらないようにする（clip は sticky を壊さない） */
+  overflow-x: clip;
 }
 
 .screen {
@@ -1823,4 +1825,195 @@ h1, h2, h3, p {
   .s3-kind.kind-common-required {
     color: #ff8a8e;
   }
+}
+
+/* ------------------------------------------------------------ ステージ4：コース選びの落とし穴 */
+
+.s4-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  scroll-margin-top: 80px;
+}
+
+.s4-progress {
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--accent-2);
+  font-size: 0.9rem;
+}
+
+.s4-question {
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.s4-lead {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.s4-lead li {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-weight: 700;
+}
+
+.s4-lead li:last-child {
+  background: color-mix(in srgb, var(--accent-2) 16%, var(--surface));
+  color: var(--accent-2);
+  font-weight: 900;
+}
+
+.s4-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.s4-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--border);
+  touch-action: manipulation;
+  transition: transform 0.06s, box-shadow 0.06s, opacity 0.2s;
+}
+
+.s4-option:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.s4-option:disabled {
+  cursor: default;
+}
+
+.is-answered .s4-option:not(.is-chosen) {
+  opacity: 0.6;
+}
+
+.s4-option.is-chosen {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  box-shadow: 0 4px 0 var(--accent-dark);
+}
+
+/* 答えた後にだけ、どのコースの話かを表示する */
+.s4-reveal {
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent-2);
+}
+
+.is-answered .s4-reveal {
+  display: block;
+}
+
+.s4-result:empty {
+  display: none;
+}
+
+.s4-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.s4-response {
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.s4-takeaway {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 3px solid var(--accent-3);
+  background: color-mix(in srgb, var(--accent-3) 10%, var(--surface));
+  font-weight: 800;
+}
+
+.s4-summary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: s4;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.s4-summary li {
+  counter-increment: s4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  font-weight: 800;
+}
+
+.s4-summary li::before {
+  content: counter(s4);
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* ------------------------------------------------------------ エンディング：各ステージのランク */
+
+.ending-ranks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ending-ranks li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.ending-ranks .rank-chip {
+  margin: 0;
 }

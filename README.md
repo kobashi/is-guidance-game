@@ -55,7 +55,7 @@ JSON は「最後の項目の後にカンマを付けない」「文字列は `"
 | `data/system.json` | ステージ1の部品（正しい順番に並べて書く。画面ではシャッフルされる）とメッセージ |
 | `data/bugs.json` | ステージ2の問題（コードは1行ずつ、バグの行番号・ヒント・解説・正しい行）。`required` がクリアに必要な正解数。現在はサンプル8問 |
 | `data/curriculum.json` | ステージ3の科目（科目名・年次・前後期・必修区分・前提科目は「超履修計画2026」から転記）、伸びるスキル、1年で取れる科目数、進路・卒業研究の例 |
-| `data/quiz.json` | ステージ4のクイズ（M5 で追加予定） |
+| `data/quiz.json` | ステージ4のクイズ（質問、選択肢ごとの一言と効果音、答えた後のメッセージ、最後のまとめ）。正誤は問わない |
 
 ### 音の初期値（sounds.json）
 
@@ -92,7 +92,7 @@ JSON は「最後の項目の後にカンマを付けない」「文字列は `"
 
 ### 公開前に教員が確認すること
 
-- `data/ui.json` の `ending.honor`（称号）と `ending.message` の文言
+- `data/ui.json` の `ending.honors`（ランクの合計点で決まる称号）と `ending.message` の文言
 - `data/links.json` のリンク先 URL
 - `data/sounds.json` の `defaultEnabled`（ガイダンス当日は `false` 推奨）
 - `data/curriculum.json` の `skills`（科目ごとに伸びるスキル）、`maxPicks`、`careers`（ゲーム用に設定した値）

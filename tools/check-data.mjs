@@ -53,7 +53,7 @@ const checks = {
       'stage.label', 'stage.loadError', 'placeholder.note', 'placeholder.clear',
       'clear.heading', 'clear.rankLabel', 'clear.mistakes', 'clear.time', 'clear.next', 'clear.toEnding', 'clear.skipHint',
       'ending.heading', 'ending.honorLabel', 'ending.honor', 'ending.message', 'ending.linksHeading',
-      'ending.reset', 'ending.resetConfirm',
+      'ending.reset', 'ending.resetConfirm', 'ending.ranksLabel',
       'settings.heading', 'settings.sound', 'settings.bgmVolume', 'settings.sfxVolume', 'settings.hint', 'settings.close',
     ]);
     if (!Array.isArray(ui.stages) || ui.stages.length !== STAGE_COUNT) {
@@ -61,6 +61,14 @@ const checks = {
     } else {
       ui.stages.forEach((s, i) => {
         if (!isStr(s?.name) || !isStr(s?.short)) err('ui.json', `stages[${i}] に name と short が必要です`);
+      });
+    }
+    if (ui.ending?.honors !== undefined) {
+      if (!Array.isArray(ui.ending.honors)) err('ui.json', '"ending.honors" は配列にしてください');
+      else ui.ending.honors.forEach((h, i) => {
+        if (!Number.isInteger(h?.min) || h.min < 0) err('ui.json', `ending.honors[${i}].min は0以上の整数にしてください`);
+        if (!isStr(h?.title)) err('ui.json', `ending.honors[${i}].title が必要です`);
+        if (i > 0 && Number.isInteger(h?.min) && h.min > ui.ending.honors[i - 1].min) err('ui.json', '"ending.honors" は min の大きい順に並べてください');
       });
     }
     const r = ui.rank;
@@ -238,6 +246,31 @@ const checks = {
     }
   },
 
+  // -------------------------------------------------------------- quiz.json（ステージ4）
+  'quiz.json'(d) {
+    const F = 'quiz.json';
+    requireStrings(F, d, ['ui.intro', 'ui.progress', 'ui.next', 'ui.toSummary', 'ui.finish', 'summary.heading']);
+    if (!Array.isArray(d.summary?.points) || !d.summary.points.every(isStr)) err(F, '"summary.points" は文字列の配列にしてください');
+    if (!Array.isArray(d.questions) || d.questions.length === 0) {
+      err(F, '"questions" は1問以上の配列にしてください');
+      return;
+    }
+    d.questions.forEach((q, i) => {
+      const w = `questions[${i}]`;
+      for (const f of ['id', 'question', 'takeaway']) if (!isStr(q?.[f])) err(F, `${w}.${f} が必要です`);
+      if (q?.lead !== undefined && (!Array.isArray(q.lead) || !q.lead.every(isStr))) err(F, `${w}.lead は文字列の配列にしてください`);
+      if (!Array.isArray(q?.options) || q.options.length < 2) {
+        err(F, `${w}.options は2つ以上の配列にしてください`);
+        return;
+      }
+      q.options.forEach((o, j) => {
+        for (const f of ['label', 'response']) if (!isStr(o?.[f])) err(F, `${w}.options[${j}].${f} が必要です`);
+        if (o?.reveal !== undefined && !isStr(o.reveal)) err(F, `${w}.options[${j}].reveal は文字列にしてください`);
+        if (o?.sfx !== undefined && !SFX_NAMES.includes(o.sfx)) err(F, `${w}.options[${j}].sfx は ${SFX_NAMES.join(' / ')} のどれかにしてください`);
+      });
+    });
+  },
+
   // -------------------------------------------------------------- links.json
   'links.json'(l) {
     if (!Array.isArray(l.links) || l.links.length === 0) {
@@ -252,7 +285,7 @@ const checks = {
   },
 };
 
-const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json', 'bugs.json', 'curriculum.json'];
+const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json', 'bugs.json', 'curriculum.json', 'quiz.json'];
 for (const name of REQUIRED) {
   if (!existsSync(join(DATA, name))) err(name, 'ファイルがありません');
 }
