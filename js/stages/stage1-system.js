@@ -29,9 +29,15 @@ const AVATAR_SVG = `
       <path class="av-hair" d="M37 38 C 36 16, 84 16, 83 38 C 78 30, 72 30, 68 25 C 64 31, 56 31, 52 25 C 48 30, 42 30, 37 38 Z" />
       <g class="av-ribbon"><path d="M38 30 L 31 25 L 32 35 Z" /><path d="M38 30 L 44 23 L 45 33 Z" /></g>
       <g class="av-ribbon"><path d="M82 30 L 89 25 L 88 35 Z" /><path d="M82 30 L 76 23 L 75 33 Z" /></g>
-      <g class="av-lily">
-        ${[0, 1, 2, 3, 4, 5].map((k) => `<ellipse cx="74" cy="15.5" rx="2.6" ry="4.8" transform="rotate(${k * 60} 74 20)" />`).join('')}
-        <circle class="av-lily-center" cx="74" cy="20" r="1.8" />
+      <g class="av-lily" transform="translate(63 24) rotate(-16) scale(0.86)">
+        <path class="av-clip" d="M-8 0.4 C -6 -2.2, -1.5 -2.4, 2 -0.8 L 2 0.8 C -1.5 2.2, -5.5 2.6, -8 0.4 Z" />
+        <path class="av-lily-stem" d="M0 0 L 3 0" />
+        <path class="av-lily-petal" d="M2 0 C 6 -1.5, 9 -5, 14 -8.5 C 13 -3, 13 3, 14 8.5 C 9 5, 6 1.5, 2 0 Z" />
+        <path class="av-lily-petal" d="M10 -4 C 13 -8, 17 -10, 20.5 -8.5 C 17 -7, 15 -5, 13 -2.5 Z" />
+        <path class="av-lily-petal" d="M10 4 C 13 8, 17 10, 20.5 8.5 C 17 7, 15 5, 13 2.5 Z" />
+        <path class="av-lily-petal" d="M11 0 C 14 -1.6, 18 -1.3, 21.5 0 C 18 1.3, 14 1.6, 11 0 Z" />
+        <path class="av-lily-stamen" d="M6 0 L 18.5 -3.5 M 6 0 L 19.5 0.6 M 6 0 L 17.5 4" />
+        <circle class="av-lily-pollen" cx="18.5" cy="-3.5" r="1" /><circle class="av-lily-pollen" cx="19.5" cy="0.6" r="1" /><circle class="av-lily-pollen" cx="17.5" cy="4" r="1" />
       </g>
       <ellipse class="av-eye" cx="52.5" cy="42" rx="2.4" ry="3.1" />
       <ellipse class="av-eye" cx="67.5" cy="42" rx="2.4" ry="3.1" />

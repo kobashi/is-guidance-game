@@ -20,6 +20,9 @@ const STAGE_FILES = ['stage1-system.js', 'stage2-bug.js', 'stage3-dungeon.js', '
 const STAGE_COUNT = STAGE_FILES.length;
 const RANK_ORDER = ['S', 'A', 'B', 'C'];
 const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
+// 公開時に GitHub Actions が ?v=（コミットID）を付ける。古いファイルがブラウザに残らないよう、後から読むファイルにも付ける
+const BUILD = new URL(import.meta.url).searchParams.get('v');
+const withBuild = (path) => (BUILD && BUILD !== '__BUILD__' ? `${path}?v=${BUILD}` : path);
 
 // タイトルのピタゴラ装置（飾りの絵。文言は ui.json）
 const PYTHAGORA_SVG = `
@@ -308,7 +311,7 @@ async function showStage(n, token) {
 
   let mod;
   try {
-    mod = await import(`./stages/${STAGE_FILES[n - 1]}`);
+    mod = await import(withBuild(`./stages/${STAGE_FILES[n - 1]}`));
   } catch (e) {
     console.error(e);
     if (token === renderToken) root.append(el('p', { class: 'error', text: ui.stage.loadError }));
@@ -487,7 +490,7 @@ function canDrawGlyph(ch) {
 // ---------------------------------------------------------------- デバッグ画面
 
 async function showDebug(token) {
-  const { renderDebug } = await import('./debug.js');
+  const { renderDebug } = await import(withBuild('./debug.js'));
   if (token !== renderToken) return;
   const { node, dispose } = renderDebug({
     audio, fx, el, setSound,
