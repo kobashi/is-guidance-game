@@ -205,6 +205,7 @@ export async function mount(root, ctx) {
   // ---- 卒業（結果）
 
   function graduate() {
+    ctx.markCleared({ mistakes });
     const R = U.result;
     const t = skillTotals();
     const ranked = skills.filter((k) => t[k.id] > 0).sort((a, b) => t[b.id] - t[a.id]);

@@ -147,7 +147,10 @@ export async function mount(root, ctx) {
   // 不正解のとき
   ctx.audio.play('wrong'); ctx.fx.shake();
 
-  // クリアしたら（ランク・クリア演出・次のステージへの移動は main.js が行う）
+  // クリア条件を満たした瞬間に記録する（演出の途中で画面を離れても、次のステージが解放される）
+  ctx.markCleared({ mistakes: 2 });
+
+  // 最後のボタンで（ランク・クリア演出・次のステージへの移動は main.js が行う）
   ctx.complete({ mistakes: 2 });
 
   return () => { /* 画面を離れるときの後片付け（タイマー解除など） */ };
