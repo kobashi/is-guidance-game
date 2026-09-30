@@ -30,7 +30,7 @@ const AVATAR_SVG = `
       <g class="av-ribbon"><path d="M38 30 L 31 25 L 32 35 Z" /><path d="M38 30 L 44 23 L 45 33 Z" /></g>
       <g class="av-ribbon"><path d="M82 30 L 89 25 L 88 35 Z" /><path d="M82 30 L 76 23 L 75 33 Z" /></g>
       <g class="av-lily" transform="translate(63 24) rotate(-16) scale(0.86)">
-        <rect class="av-clip" x="-11" y="-2.2" width="12" height="4.4" rx="2.2" />
+        <path class="av-clip" d="M-8 0.4 C -6 -2.2, -1.5 -2.4, 2 -0.8 L 2 0.8 C -1.5 2.2, -5.5 2.6, -8 0.4 Z" />
         <path class="av-lily-stem" d="M0 0 L 3 0" />
         <path class="av-lily-petal" d="M2 0 C 6 -1.5, 9 -5, 14 -8.5 C 13 -3, 13 3, 14 8.5 C 9 5, 6 1.5, 2 0 Z" />
         <path class="av-lily-petal" d="M10 -4 C 13 -8, 17 -10, 20.5 -8.5 C 17 -7, 15 -5, 13 -2.5 Z" />

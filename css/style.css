@@ -1125,7 +1125,8 @@ h1, h2, h3, p {
 .s1-avatar .av-boot { fill: #ff6fae; }
 .s1-avatar .av-ribbon path { fill: #ff6fae; }
 /* 髪留め：横から見たゆりの花 */
-.s1-avatar .av-clip { fill: #ffd23f; stroke: #c99a00; stroke-width: 0.8; }
+/* 留め具は茎から続く葉っぱの形・色にして、花に馴染ませる */
+.s1-avatar .av-clip { fill: #4fc28a; stroke: #3fae78; stroke-width: 0.5; }
 .s1-avatar .av-lily-stem { fill: none; stroke: #4fc28a; stroke-width: 2.4; stroke-linecap: round; }
 .s1-avatar .av-lily-petal { fill: #fff; stroke: #f48fbf; stroke-width: 0.9; stroke-linejoin: round; }
 .s1-avatar .av-lily-stamen { fill: none; stroke: #e6a800; stroke-width: 0.7; stroke-linecap: round; }
