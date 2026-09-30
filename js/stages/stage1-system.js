@@ -4,16 +4,29 @@
 // 全部つながってアバターが動いたら、「部品を1つ外してみよう」。どれを外しても配信事故で止まる。
 // データは data/system.json（parts は正しい順に書く）。
 
+// アバター：ゆりの花をモチーフにしたキャラクター（6枚の花びらの頭、つぼみの体、葉っぱの腕）
 const AVATAR_SVG = `
 <svg class="s1-avatar" viewBox="0 0 120 160" role="img" aria-hidden="true">
   <g class="av-body">
-    <g class="av-leg av-leg-l"><line x1="60" y1="96" x2="44" y2="142"/><circle class="av-sensor" cx="44" cy="142" r="4"/></g>
-    <g class="av-leg av-leg-r"><line x1="60" y1="96" x2="76" y2="142"/><circle class="av-sensor" cx="76" cy="142" r="4"/></g>
-    <line x1="60" y1="46" x2="60" y2="96"/>
-    <circle class="av-sensor" cx="60" cy="96" r="4"/>
-    <g class="av-arm av-arm-l"><line x1="60" y1="58" x2="34" y2="86"/><circle class="av-sensor" cx="34" cy="86" r="4"/></g>
-    <g class="av-arm av-arm-r"><line x1="60" y1="58" x2="86" y2="86"/><circle class="av-sensor" cx="86" cy="86" r="4"/></g>
-    <g class="av-head"><circle cx="60" cy="30" r="15"/><circle class="av-sensor" cx="60" cy="15" r="4"/></g>
+    <g class="av-leg av-leg-l"><rect class="av-stem" x="48" y="114" width="6" height="28" rx="3" /><ellipse class="av-foot" cx="49" cy="144" rx="9" ry="5" /></g>
+    <g class="av-leg av-leg-r"><rect class="av-stem" x="66" y="114" width="6" height="28" rx="3" /><ellipse class="av-foot" cx="71" cy="144" rx="9" ry="5" /></g>
+    <path class="av-torso" d="M60 66 C 42 76, 40 110, 60 122 C 80 110, 78 76, 60 66 Z" />
+    <path class="av-torso-line" d="M60 76 L 60 112" />
+    <g class="av-arm av-arm-l"><path class="av-leaf" d="M57 86 C 46 76, 30 80, 22 94 C 36 100, 50 98, 57 86 Z" /></g>
+    <g class="av-arm av-arm-r"><path class="av-leaf" d="M63 86 C 74 76, 90 80, 98 94 C 84 100, 70 98, 63 86 Z" /></g>
+    <g class="av-head">
+      ${[0, 1, 2, 3, 4, 5].map((k) => `<ellipse class="av-petal" cx="60" cy="26" rx="10.5" ry="17" transform="rotate(${k * 60 + 30} 60 44)" />`).join('')}
+      <g class="av-stamen">
+        <path d="M55 32 Q 48 18 44 6" /><path d="M60 30 L 60 1" /><path d="M65 32 Q 72 18 76 6" />
+        <circle cx="44" cy="5" r="3.2" /><circle cx="60" cy="0" r="3.2" /><circle cx="76" cy="5" r="3.2" />
+      </g>
+      <circle class="av-face" cx="60" cy="46" r="16.5" />
+      <ellipse class="av-eye" cx="54" cy="44.5" rx="2.6" ry="3.5" />
+      <ellipse class="av-eye" cx="66" cy="44.5" rx="2.6" ry="3.5" />
+      <ellipse class="av-blush" cx="48.5" cy="51" rx="3.6" ry="2.1" />
+      <ellipse class="av-blush" cx="71.5" cy="51" rx="3.6" ry="2.1" />
+      <path class="av-mouth" d="M56 51.5 Q 60 56 64 51.5" />
+    </g>
   </g>
 </svg>`;
 
