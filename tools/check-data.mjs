@@ -140,6 +140,42 @@ const checks = {
     });
   },
 
+  // -------------------------------------------------------------- bugs.json（ステージ2）
+  'bugs.json'(d) {
+    requireStrings('bugs.json', d, [
+      'ui.intro', 'ui.progress', 'ui.storyLabel', 'ui.tapHint', 'ui.wrong', 'ui.hintLabel',
+      'ui.correctHeading', 'ui.fixLabel', 'ui.next', 'ui.finish',
+    ]);
+    const qs = d.questions;
+    if (!Array.isArray(qs) || qs.length === 0) {
+      err('bugs.json', '"questions" は1問以上の配列にしてください');
+      return;
+    }
+    if (!Number.isInteger(d.required) || d.required < 1) err('bugs.json', '"required"（クリアに必要な正解数）は1以上の整数にしてください');
+    else if (d.required > qs.length) err('bugs.json', `"required" (${d.required}) が問題数 (${qs.length}) より多いです`);
+    if (qs.length < 5) warn('bugs.json', `問題が ${qs.length} 問です（5問以上を推奨）`);
+    const ids = new Set();
+    qs.forEach((q, i) => {
+      const w = `questions[${i}]${isStr(q?.id) ? `（${q.id}）` : ''}`;
+      for (const k of ['id', 'lang', 'title', 'story', 'hint', 'explanation']) {
+        if (!isStr(q?.[k])) err('bugs.json', `${w}.${k} が必要です`);
+      }
+      if (ids.has(q?.id)) err('bugs.json', `${w}.id が重複しています`);
+      ids.add(q?.id);
+      if (!Array.isArray(q?.code) || q.code.some((l) => typeof l !== 'string')) {
+        err('bugs.json', `${w}.code は文字列（1行ずつ）の配列にしてください`);
+        return;
+      }
+      if (q.code.length < 5 || q.code.length > 12) err('bugs.json', `${w}.code は5〜12行にしてください（今は ${q.code.length} 行）`);
+      if (!Number.isInteger(q.bugLine) || q.bugLine < 1 || q.bugLine > q.code.length) {
+        err('bugs.json', `${w}.bugLine は 1〜${q.code.length} の整数にしてください`);
+      } else if (!q.code[q.bugLine - 1].trim()) {
+        err('bugs.json', `${w}.bugLine (${q.bugLine}) が空行を指しています`);
+      }
+      if (q.fix !== undefined && !isStr(q.fix)) err('bugs.json', `${w}.fix は文字列にしてください（不要なら項目ごと消す）`);
+    });
+  },
+
   // -------------------------------------------------------------- links.json
   'links.json'(l) {
     if (!Array.isArray(l.links) || l.links.length === 0) {
@@ -154,7 +190,7 @@ const checks = {
   },
 };
 
-const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json'];
+const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json', 'bugs.json'];
 for (const name of REQUIRED) {
   if (!existsSync(join(DATA, name))) err(name, 'ファイルがありません');
 }
