@@ -176,6 +176,68 @@ const checks = {
     });
   },
 
+  // -------------------------------------------------------------- curriculum.json（ステージ3）
+  'curriculum.json'(d) {
+    const F = 'curriculum.json';
+    requireStrings(F, d, [
+      'ui.intro', 'ui.roomTitle', 'ui.picks', 'ui.picksNote', 'ui.full', 'ui.skillsHeading',
+      'ui.kind.common-required', 'ui.kind.course-required', 'ui.kind.elective', 'ui.term.前', 'ui.term.後',
+      'ui.needs', 'ui.door', 'ui.graduate', 'ui.doorLocked', 'ui.doorLockedPrereq', 'ui.goBack', 'ui.back', 'ui.dropped',
+      'ui.result.heading', 'ui.result.typeLabel', 'ui.result.careerLabel', 'ui.result.researchLabel', 'ui.result.note', 'ui.result.finish',
+    ]);
+    const skillIds = new Set();
+    if (!Array.isArray(d.skills) || d.skills.length === 0) err(F, '"skills" は1つ以上の配列にしてください');
+    else d.skills.forEach((k, i) => {
+      for (const f of ['id', 'label', 'icon']) if (!isStr(k?.[f])) err(F, `skills[${i}].${f} が必要です`);
+      if (skillIds.has(k?.id)) err(F, `skills[${i}].id "${k.id}" が重複しています`);
+      skillIds.add(k?.id);
+      if (!isObj(d.careers?.[k?.id])) err(F, `careers.${k?.id} がありません`);
+      else for (const f of ['type', 'career', 'research']) if (!isStr(d.careers[k.id][f])) err(F, `careers.${k.id}.${f} が必要です`);
+    });
+    const years = new Map();
+    if (!Array.isArray(d.years) || d.years.length === 0) err(F, '"years" は1つ以上の配列にしてください');
+    else d.years.forEach((y, i) => {
+      if (!Number.isInteger(y?.year) || y.year < 1) err(F, `years[${i}].year は1以上の整数にしてください`);
+      if (!Number.isInteger(y?.maxPicks) || y.maxPicks < 1) err(F, `years[${i}].maxPicks は1以上の整数にしてください`);
+      years.set(y?.year, y);
+    });
+    if (!Array.isArray(d.subjects) || d.subjects.length === 0) {
+      err(F, '"subjects" は1つ以上の配列にしてください');
+      return;
+    }
+    const byId = new Map();
+    d.subjects.forEach((s, i) => {
+      if (byId.has(s?.id)) err(F, `subjects[${i}].id "${s.id}" が重複しています`);
+      byId.set(s?.id, s);
+    });
+    const KINDS = ['common-required', 'course-required', 'elective'];
+    const before = (a, b) => a.year < b.year || (a.year === b.year && a.term === '前' && b.term === '後');
+    d.subjects.forEach((s, i) => {
+      const w = `subjects[${i}]${isStr(s?.name) ? `（${s.name}）` : ''}`;
+      for (const f of ['id', 'name']) if (!isStr(s?.[f])) err(F, `${w}.${f} が必要です`);
+      if (!years.has(s?.year)) err(F, `${w}.year は years にある年次にしてください`);
+      if (!['前', '後'].includes(s?.term)) err(F, `${w}.term は "前" か "後" にしてください`);
+      if (!KINDS.includes(s?.kind)) err(F, `${w}.kind は ${KINDS.join(' / ')} のどれかにしてください`);
+      if (!Array.isArray(s?.prereq)) err(F, `${w}.prereq は配列にしてください（前提なしなら []）`);
+      else s.prereq.forEach((p) => {
+        const ps = byId.get(p);
+        if (!ps) err(F, `${w}.prereq の "${p}" という科目がありません`);
+        else if (!before(ps, s)) err(F, `${w} の前提「${ps.name}」が同時期か後に開講されています`);
+      });
+      if (!isObj(s?.skills)) err(F, `${w}.skills はオブジェクトにしてください（伸びないなら {}）`);
+      else for (const [k, v] of Object.entries(s.skills)) {
+        if (!skillIds.has(k)) err(F, `${w}.skills の "${k}" は skills にありません`);
+        if (!Number.isInteger(v) || v < 1) err(F, `${w}.skills.${k} は1以上の整数にしてください`);
+      }
+    });
+    // クリアできるか：各年の必修が maxPicks に収まること
+    for (const [y, info] of years) {
+      const req = d.subjects.filter((s) => s.year === y && s.kind !== 'elective');
+      if (req.length > info.maxPicks) err(F, `${y}年次の必修 ${req.length} 科目が maxPicks (${info.maxPicks}) を超えていて、クリアできません`);
+      if (!d.subjects.some((s) => s.year === y)) warn(F, `${y}年次の科目がありません`);
+    }
+  },
+
   // -------------------------------------------------------------- links.json
   'links.json'(l) {
     if (!Array.isArray(l.links) || l.links.length === 0) {
@@ -190,7 +252,7 @@ const checks = {
   },
 };
 
-const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json', 'bugs.json'];
+const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json', 'bugs.json', 'curriculum.json'];
 for (const name of REQUIRED) {
   if (!existsSync(join(DATA, name))) err(name, 'ファイルがありません');
 }
