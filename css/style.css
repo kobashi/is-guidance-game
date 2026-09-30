@@ -1124,8 +1124,12 @@ h1, h2, h3, p {
 .s1-avatar .av-vein { fill: none; stroke: #f8b6d3; stroke-width: 1.2; stroke-linecap: round; }
 .s1-avatar .av-boot { fill: #ff6fae; }
 .s1-avatar .av-ribbon path { fill: #ff6fae; }
-.s1-avatar .av-lily ellipse { fill: #fff; stroke: #f48fbf; stroke-width: 0.8; }
-.s1-avatar .av-lily-center { fill: #ffb800; }
+/* 髪留め：横から見たゆりの花 */
+.s1-avatar .av-clip { fill: #ffd23f; stroke: #c99a00; stroke-width: 0.8; }
+.s1-avatar .av-lily-stem { fill: none; stroke: #4fc28a; stroke-width: 2.4; stroke-linecap: round; }
+.s1-avatar .av-lily-petal { fill: #fff; stroke: #f48fbf; stroke-width: 0.9; stroke-linejoin: round; }
+.s1-avatar .av-lily-stamen { fill: none; stroke: #e6a800; stroke-width: 0.7; stroke-linecap: round; }
+.s1-avatar .av-lily-pollen { fill: #c9731f; }
 .s1-avatar .av-mic-handle { fill: none; stroke: #3a3550; stroke-width: 3; stroke-linecap: round; }
 .s1-avatar .av-mic { fill: #ffd23f; stroke: #3a3550; stroke-width: 1.4; }
 .s1-avatar .av-mic-line { fill: none; stroke: #b88a00; stroke-width: 0.9; }
