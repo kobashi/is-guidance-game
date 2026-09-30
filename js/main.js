@@ -21,6 +21,26 @@ const STAGE_COUNT = STAGE_FILES.length;
 const RANK_ORDER = ['S', 'A', 'B', 'C'];
 const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
 
+// タイトルのピタゴラ装置（飾りの絵。文言は ui.json）
+const PYTHAGORA_SVG = `
+<svg class="pz" viewBox="0 0 300 124" aria-hidden="true">
+  <line class="pz-track" x1="2" y1="26" x2="104" y2="112" />
+  <line class="pz-track" x1="104" y1="112" x2="298" y2="112" />
+  <circle class="pz-ball" cx="14" cy="20" r="8" />
+  ${[0, 1, 2, 3, 4].map((i) => `<rect class="pz-domino" style="--i:${i}" x="${130 + i * 20}" y="78" width="7" height="34" rx="1.5" />`).join('')}
+  <rect class="pz-switch" x="234" y="106" width="16" height="6" rx="1" />
+  <line class="pz-lever" x1="242" y1="106" x2="236" y2="94" />
+  <polyline class="pz-wire" points="250,109 272,109 272,70" />
+  <g class="pz-lamp">
+    <g class="pz-rays">
+      <line x1="272" y1="16" x2="272" y2="8" /><line x1="254" y1="28" x2="248" y2="22" /><line x1="290" y1="28" x2="296" y2="22" />
+      <line x1="253" y1="46" x2="245" y2="46" /><line x1="291" y1="46" x2="299" y2="46" />
+    </g>
+    <circle class="pz-bulb" cx="272" cy="46" r="15" />
+    <rect class="pz-base" x="265" y="60" width="14" height="10" rx="2" />
+  </g>
+</svg>`;
+
 const app = document.getElementById('app');
 let ui = null;
 let links = null;
@@ -211,14 +231,23 @@ function showTitle() {
     ]
     : [el('button', { type: 'button', class: 'btn btn-big', onclick: start }, T.start)];
 
-  const E = T.emblem ?? {};
+  // ピタゴラ装置：玉 → ドミノ → スイッチ → ランプ → タイトルが点灯。タップでもう一度
+  const art = el('button', { type: 'button', class: 'pz-btn', 'aria-label': T.replayArt, 'data-sfx': 'connect' });
+  art.innerHTML = PYTHAGORA_SVG;
+  const title = el('h1', { class: 'game-title', text: T.heading });
+  const play = () => {
+    for (const n of [art, title]) {
+      n.classList.remove('is-playing');
+      void n.offsetWidth; // アニメーションを最初からやり直す
+      n.classList.add('is-playing');
+    }
+  };
+  art.addEventListener('click', play);
+  play();
+
   const screen = el('section', { class: 'screen title-screen' },
-    el('div', { class: 'emblem', 'aria-hidden': 'true' },
-      el('span', { class: 'emblem-part emblem-left', text: E.left }),
-      el('span', { class: 'emblem-part emblem-right', text: E.right }),
-      el('span', { class: 'emblem-whole', text: E.whole }),
-    ),
-    el('h1', { class: 'game-title', text: T.heading }),
+    art,
+    title,
     el('p', { class: 'lead', text: T.lead }),
     el('div', { class: 'sound-choice', role: 'group', 'aria-label': T.soundGroup }, onBtn, offBtn),
     el('div', { class: 'actions' }, actions),
@@ -393,6 +422,7 @@ function showEnding() {
     honor,
     ranks,
     el('p', { class: 'ending-message', text: E.message }),
+    E.extra ? renderEndingExtra(E.extra) : null,
     el('h2', { class: 'section-title', text: E.linksHeading }),
     el('ul', { class: 'link-list' }, linkItems),
     el('div', { class: 'actions' },
@@ -410,6 +440,48 @@ function showEnding() {
   // ファンファーレが終わってから BGM を流す
   const timer = setTimeout(() => audio.playBgm('ending'), 3600);
   cleanup = () => clearTimeout(timer);
+}
+
+/** エンディングのおまけ：漢字もシステム？（明＝日＋月、ビャンビャン麺） */
+function renderEndingExtra(X) {
+  const ok = canDrawGlyph(X.biangChar);
+  return el('section', { class: 'ending-extra' },
+    el('h2', { class: 'section-title', text: X.heading }),
+    el('p', { text: X.mei }),
+    el('div', { class: 'biang' },
+      el('span', { class: `biang-char${ok ? '' : ' is-missing'}`, 'aria-hidden': 'true', text: ok ? X.biangChar : '□' }),
+      el('div', {},
+        el('p', { class: 'biang-label', text: X.biangLabel }),
+        el('p', { text: X.biang }))),
+    ok ? null : el('p', { class: 'biang-missing', text: X.biangMissing }));
+}
+
+/**
+ * その文字を描けるフォントが端末にあるか。
+ * 描けない文字は、同じブロックの別の文字と同じ「豆腐（□）」になるので、絵を比べて判定する。
+ */
+function canDrawGlyph(ch) {
+  try {
+    const size = 40;
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const g = c.getContext('2d', { willReadFrequently: true });
+    const draw = (t) => {
+      g.clearRect(0, 0, size, size);
+      g.font = `${size * 0.8}px sans-serif`;
+      g.textBaseline = 'top';
+      g.fillStyle = '#000';
+      g.fillText(t, 0, 0);
+      return g.getImageData(0, 0, size, size).data;
+    };
+    const a = draw(ch);
+    if (!a.some((v, i) => i % 4 === 3 && v > 0)) return false; // 何も描かれていない
+    // 同じ CJK 拡張G ブロックの先頭の文字と、どのフォントにもない文字（U+10FFFD）の「豆腐」と比べる
+    const same = (b) => a.every((v, i) => v === b[i]);
+    return !same(draw('\u{30000}')) && !same(draw('\u{10FFFD}'));
+  } catch {
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------- デバッグ画面

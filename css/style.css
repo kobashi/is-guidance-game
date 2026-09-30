@@ -347,62 +347,126 @@ h1, h2, h3, p {
   padding-top: 8px;
 }
 
-.emblem {
-  position: relative;
-  height: 128px;
+.pz-btn {
+  display: block;
+  width: min(100%, 340px);
   margin: 0 auto;
-  width: 220px;
-  font-weight: 900;
-  font-size: 92px;
-  line-height: 128px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
-.emblem-part,
-.emblem-whole {
-  position: absolute;
-  inset: 0;
-  text-align: center;
+.pz {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
-.emblem-left {
-  color: var(--accent-2);
-  animation: emblem-left 1.6s cubic-bezier(0.5, 0, 0.3, 1) both;
+.pz-track,
+.pz-wire,
+.pz-lever,
+.pz-rays line {
+  stroke-linecap: round;
+  fill: none;
 }
 
-.emblem-right {
-  color: var(--accent);
-  animation: emblem-right 1.6s cubic-bezier(0.5, 0, 0.3, 1) both;
+.pz-track {
+  stroke: var(--muted);
+  stroke-width: 4;
 }
 
-.emblem-whole {
-  background: linear-gradient(135deg, var(--accent-2), var(--accent) 60%, var(--accent-3));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--accent) 45%, transparent));
-  animation: emblem-whole 1.6s ease-out both;
+.pz-ball {
+  fill: var(--accent-2);
 }
 
-@keyframes emblem-left {
-  0% { opacity: 0; transform: translateX(-90px) rotate(-20deg); }
-  30% { opacity: 1; transform: translateX(-52px); }
-  60% { opacity: 1; transform: translateX(-52px); }
-  80% { opacity: 1; transform: translateX(0) scale(0.9); }
-  100% { opacity: 0; transform: translateX(0); }
+.pz-domino {
+  fill: var(--accent);
+  transform-box: fill-box;
+  transform-origin: right bottom;
 }
 
-@keyframes emblem-right {
-  0% { opacity: 0; transform: translateX(90px) rotate(20deg); }
-  30% { opacity: 1; transform: translateX(52px); }
-  60% { opacity: 1; transform: translateX(52px); }
-  80% { opacity: 1; transform: translateX(0) scale(0.9); }
-  100% { opacity: 0; transform: translateX(0); }
+.pz-switch {
+  fill: var(--muted);
 }
 
-@keyframes emblem-whole {
-  0%, 75% { opacity: 0; transform: scale(0.6); }
-  88% { opacity: 1; transform: scale(1.25); }
-  100% { opacity: 1; transform: scale(1); }
+.pz-lever {
+  stroke: var(--muted);
+  stroke-width: 4;
+  transform-box: fill-box;
+  transform-origin: right bottom;
+}
+
+.pz-wire {
+  stroke: var(--border);
+  stroke-width: 3;
+}
+
+.pz-bulb {
+  fill: var(--surface-2);
+  stroke: var(--muted);
+  stroke-width: 3;
+}
+
+.pz-base {
+  fill: var(--muted);
+}
+
+.pz-rays line {
+  stroke: #ffb800;
+  stroke-width: 4;
+}
+
+.pz-rays {
+  opacity: 0;
+}
+
+/* 連鎖のアニメーション（.is-playing が付くたびに最初から） */
+.pz-btn.is-playing .pz-ball { animation: pz-roll 0.9s cubic-bezier(0.5, 0, 0.9, 0.6) both; }
+.pz-btn.is-playing .pz-domino { animation: pz-fall 0.28s calc(0.9s + var(--i) * 0.13s) ease-in both; }
+.pz-btn.is-playing .pz-lever { animation: pz-lever 0.15s 1.66s ease-out both; }
+.pz-btn.is-playing .pz-wire { animation: pz-wire 0.2s 1.72s both; }
+.pz-btn.is-playing .pz-bulb { animation: pz-bulb 0.35s 1.8s ease-out both; }
+.pz-btn.is-playing .pz-rays { animation: pz-rays 0.4s 1.85s ease-out both; }
+.game-title.is-playing { animation: title-on 0.8s 1.85s ease-out both; }
+
+@keyframes pz-roll {
+  0% { transform: translate(0, 0); }
+  70% { transform: translate(84px, 78px); }
+  100% { transform: translate(106px, 84px); }
+}
+
+@keyframes pz-fall {
+  from { transform: rotate(0); }
+  to { transform: rotate(72deg); }
+}
+
+@keyframes pz-lever {
+  to { transform: rotate(60deg); }
+}
+
+@keyframes pz-wire {
+  to { stroke: #ffb800; }
+}
+
+@keyframes pz-bulb {
+  0% { fill: var(--surface-2); }
+  50% { fill: #fff27a; }
+  100% { fill: #ffd23f; stroke: #e0a100; filter: drop-shadow(0 0 10px #ffd23f); }
+}
+
+@keyframes pz-rays {
+  from { opacity: 0; transform: scale(0.6); transform-origin: 272px 46px; }
+  to { opacity: 1; transform: scale(1); transform-origin: 272px 46px; }
+}
+
+@keyframes title-on {
+  0% { opacity: 0.25; }
+  40% { opacity: 1; text-shadow: 0 0 18px #ffd23f, 0 0 36px #ffd23f; }
+  100% { opacity: 1; }
 }
 
 .game-title {
@@ -975,18 +1039,16 @@ h1, h2, h3, p {
 
 @media (prefers-reduced-motion: reduce) {
   .screen,
-  .emblem-part,
   .fx-shake,
   .fx-shake-big {
     animation: none !important;
   }
 
-  .emblem-part {
-    opacity: 0;
-  }
-
-  .emblem-whole {
-    animation: fx-fade-in 0.3s ease-out both;
+  /* ピタゴラ装置は動かさず、最後の状態（ランプ点灯）をすぐ表示する */
+  .pz-btn.is-playing *,
+  .game-title.is-playing {
+    animation-duration: 0.01s !important;
+    animation-delay: 0s !important;
   }
 
   .fx-pop {
@@ -1326,14 +1388,58 @@ h1, h2, h3, p {
   text-align: center;
 }
 
-.s1-kanji {
-  font-size: 2.4rem;
+.s1-headline {
+  font-size: 2.2rem;
   font-weight: 900;
   line-height: 1.2;
   background: linear-gradient(135deg, var(--accent-2), var(--accent) 60%, var(--accent-3));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.s1-headline.is-broken {
+  background: none;
+  color: #e5484d;
+}
+
+.s1-try {
+  font-weight: 800;
+}
+
+/* 「部品を1つ外してみよう」の間：外せる部品をゆっくり点滅させる */
+.s1-chain.is-breakable .s1-slot.is-filled {
+  cursor: pointer;
+  animation: s1-breakable 1.2s ease-in-out infinite;
+}
+
+@keyframes s1-breakable {
+  50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-2) 35%, transparent); }
+}
+
+/* 配信事故：画面が赤くなり、アバターが崩れ落ちる */
+.s1-screen.is-broken {
+  border-color: #e5484d;
+  background: radial-gradient(circle at 50% 40%, #5a1d2a, #1e0c12 70%);
+}
+
+.s1-screen.is-broken .s1-status {
+  color: #ff8a8e;
+  animation: s1-alert 0.8s steps(2, jump-none) 3;
+}
+
+.s1-screen.is-broken .av-body {
+  animation: av-collapse 0.6s cubic-bezier(0.5, 0, 0.9, 0.5) both;
+}
+
+@keyframes av-collapse {
+  0% { transform: none; }
+  40% { transform: rotate(-8deg); }
+  100% { transform: translate(18px, 6px) rotate(82deg); }
+}
+
+@keyframes s1-alert {
+  50% { opacity: 0.3; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1348,8 +1454,14 @@ h1, h2, h3, p {
   .s1-screen.is-live .av-arm-l { animation-duration: 1.6s; }
   .s1-screen.is-live .av-arm-r { animation-duration: 1.6s; }
 
-  .s1-slot.is-stop {
+  .s1-slot.is-stop,
+  .s1-chain.is-breakable .s1-slot.is-filled,
+  .s1-screen.is-broken .s1-status {
     animation: none;
+  }
+
+  .s1-screen.is-broken .av-body {
+    animation-duration: 0.01s;
   }
 }
 
@@ -2016,4 +2128,56 @@ h1, h2, h3, p {
 
 .ending-ranks .rank-chip {
   margin: 0;
+}
+
+/* ------------------------------------------------------------ エンディング：おまけ（漢字もシステム？） */
+
+.ending-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 2px dashed var(--border);
+  background: var(--surface);
+  text-align: left;
+}
+
+.biang {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.biang-char {
+  flex: none;
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--surface-2);
+  font-size: 72px;
+  line-height: 1;
+}
+
+.biang-char.is-missing {
+  color: var(--muted);
+  font-size: 56px;
+}
+
+.biang-label {
+  font-weight: 900;
+}
+
+.biang-missing {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--gold) 16%, var(--surface));
+  font-weight: 700;
+}
+
+.s1-success.is-broken {
+  border-color: #e5484d;
+  background: color-mix(in srgb, #e5484d 8%, var(--surface));
 }

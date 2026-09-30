@@ -47,13 +47,14 @@ const checks = {
       'header.progressLabel', 'header.mute', 'header.unmute', 'header.settings', 'header.debug',
       'title.heading', 'title.lead', 'title.soundGroup', 'title.soundOn', 'title.soundOff',
       'title.start', 'title.continue', 'title.restart', 'title.restartConfirm', 'title.note',
-      'title.emblem.left', 'title.emblem.right', 'title.emblem.whole',
+      'title.replayArt',
       'map.heading', 'map.stageLabel', 'map.play', 'map.replay', 'map.locked', 'map.cleared',
       'map.bestRank', 'map.endingName', 'map.ending', 'map.back',
       'stage.label', 'stage.loadError', 'placeholder.note', 'placeholder.clear',
       'clear.heading', 'clear.rankLabel', 'clear.mistakes', 'clear.time', 'clear.next', 'clear.toEnding', 'clear.skipHint',
       'ending.heading', 'ending.honorLabel', 'ending.honor', 'ending.message', 'ending.linksHeading',
       'ending.reset', 'ending.resetConfirm', 'ending.ranksLabel',
+      'ending.extra.heading', 'ending.extra.mei', 'ending.extra.biangLabel', 'ending.extra.biangChar', 'ending.extra.biang', 'ending.extra.biangMissing',
       'settings.heading', 'settings.sound', 'settings.bgmVolume', 'settings.sfxVolume', 'settings.hint', 'settings.close',
     ]);
     if (!Array.isArray(ui.stages) || ui.stages.length !== STAGE_COUNT) {
@@ -132,7 +133,7 @@ const checks = {
     requireStrings('system.json', d, [
       'intro', 'startLabel', 'goalLabel', 'slotLabel', 'slotEmpty', 'slotRemove', 'trayHeading',
       'run', 'running', 'reset', 'avatarIdle', 'stoppedWrong', 'stoppedEmpty',
-      'success.status', 'success.kanji', 'success.message', 'success.next',
+      'success.status', 'success.headline', 'success.tryBreak', 'success.brokenStatus', 'success.brokenHeadline', 'success.message', 'success.next',
     ]);
     if (!Array.isArray(d.parts) || d.parts.length < 3 || d.parts.length > 8) {
       err('system.json', '"parts" は 3〜8 個の配列にしてください（正しい順番に並べる）');
