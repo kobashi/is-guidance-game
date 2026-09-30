@@ -119,6 +119,27 @@ const checks = {
     checkGroup('bgm', BGM_NAMES);
   },
 
+  // -------------------------------------------------------------- system.json（ステージ1）
+  'system.json'(d) {
+    requireStrings('system.json', d, [
+      'intro', 'startLabel', 'goalLabel', 'slotLabel', 'slotEmpty', 'slotRemove', 'trayHeading',
+      'run', 'running', 'reset', 'avatarIdle', 'stoppedWrong', 'stoppedEmpty',
+      'success.status', 'success.kanji', 'success.message', 'success.next',
+    ]);
+    if (!Array.isArray(d.parts) || d.parts.length < 3 || d.parts.length > 8) {
+      err('system.json', '"parts" は 3〜8 個の配列にしてください（正しい順番に並べる）');
+      return;
+    }
+    const ids = new Set();
+    d.parts.forEach((p, i) => {
+      for (const k of ['id', 'icon', 'label', 'desc']) {
+        if (!isStr(p?.[k])) err('system.json', `parts[${i}].${k} が必要です`);
+      }
+      if (ids.has(p?.id)) err('system.json', `parts[${i}].id "${p.id}" が重複しています`);
+      ids.add(p?.id);
+    });
+  },
+
   // -------------------------------------------------------------- links.json
   'links.json'(l) {
     if (!Array.isArray(l.links) || l.links.length === 0) {
@@ -133,7 +154,7 @@ const checks = {
   },
 };
 
-const REQUIRED = ['ui.json', 'sounds.json', 'links.json'];
+const REQUIRED = ['ui.json', 'sounds.json', 'links.json', 'system.json'];
 for (const name of REQUIRED) {
   if (!existsSync(join(DATA, name))) err(name, 'ファイルがありません');
 }
