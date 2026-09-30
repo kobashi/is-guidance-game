@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f4f6ff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1024" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="名古屋文理大学 情報メディア学科 情報システムコースのガイダンス用ミニゲーム">
+  <title>情報システム・クエスト</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%233a5cff'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='white'%3E%E6%98%8E%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <button type="button" class="progress" id="progress" data-sfx="tap">
+        <span class="pip" data-stage="1">1</span>
+        <span class="pip" data-stage="2">2</span>
+        <span class="pip" data-stage="3">3</span>
+        <span class="pip" data-stage="4">4</span>
+      </button>
+      <button type="button" class="icon-btn" id="debug-btn" hidden>🛠</button>
+      <button type="button" class="icon-btn" id="mute-btn">🔇</button>
+      <button type="button" class="icon-btn" id="settings-btn">⚙️</button>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1">
+    <p class="loading">読み込み中…</p>
+  </main>
+
+  <dialog id="settings" class="settings"></dialog>
+
+  <noscript><p class="error">このゲームを遊ぶには JavaScript を有効にしてください。</p></noscript>
+</body>
+</html>

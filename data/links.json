@@ -1,0 +1,22 @@
+{
+  "_comment": "エンディングに表示するリンク。label は表示名、url はリンク先、note は補足（省略可）。URL は docs/REFERENCE.md より。公開前に教員が最終確認すること。",
+  "links": [
+    {
+      "label": "情報メディア学科4コース適性診断",
+      "url": "https://kobashi.nagoya-bunri.ac.jp/course-recommender/",
+      "note": "占い程度の参考にどうぞ"
+    },
+    {
+      "label": "超履修計画2026",
+      "url": "https://kobashi.github.io/HyperCurriculumTree/"
+    },
+    {
+      "label": "コース担当教員の紹介",
+      "url": "https://kobashi.github.io/HyperCurriculumTree/course-faculty.html"
+    },
+    {
+      "label": "情報システムコース（大学公式サイト）",
+      "url": "https://www.nagoya-bunri.ac.jp/department/media/is/"
+    }
+  ]
+}
