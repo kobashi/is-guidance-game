@@ -1833,9 +1833,45 @@ h1, h2, h3, p {
   box-shadow: 0 1px 0 var(--border);
 }
 
-.s3-card.kind-course-required,
-.s3-card.kind-common-required {
-  border-color: color-mix(in srgb, #e5484d 45%, var(--border));
+/* 必修の枠の色は、ヒントを出した後だけ付ける */
+.s3-room.show-kind .s3-card.kind-course-required,
+.s3-room.show-kind .s3-card.kind-common-required {
+  border-color: color-mix(in srgb, #e5484d 60%, var(--border));
+}
+
+.s3-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* 所属コースの印 */
+.s3-course {
+  padding: 0 7px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--muted);
+}
+
+.s3-course.course-common { background: #6b7280; }
+.s3-course.course-is { background: #26947b; }
+.s3-course.course-movie { background: #d9480f; }
+.s3-course.course-sound { background: #7048e8; }
+.s3-course.course-design { background: #c2255c; }
+
+.s3-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.s3-hint {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold) 18%, var(--surface));
+  font-weight: 700;
 }
 
 .s3-card.is-on {

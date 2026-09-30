@@ -191,7 +191,7 @@ const checks = {
     requireStrings(F, d, [
       'ui.intro', 'ui.roomTitle', 'ui.picks', 'ui.picksNote', 'ui.full', 'ui.skillsHeading',
       'ui.kind.common-required', 'ui.kind.course-required', 'ui.kind.elective', 'ui.term.前', 'ui.term.後',
-      'ui.needs', 'ui.door', 'ui.graduate', 'ui.doorLocked', 'ui.doorLockedPrereq', 'ui.goBack', 'ui.back', 'ui.dropped',
+      'ui.needs', 'ui.door', 'ui.graduate', 'ui.required', 'ui.hintShown', 'ui.doorLocked', 'ui.doorLockedPrereq', 'ui.goBack', 'ui.back', 'ui.dropped',
       'ui.result.heading', 'ui.result.typeLabel', 'ui.result.careerLabel', 'ui.result.researchLabel', 'ui.result.note', 'ui.result.finish',
     ]);
     const skillIds = new Set();
@@ -226,6 +226,7 @@ const checks = {
       for (const f of ['id', 'name']) if (!isStr(s?.[f])) err(F, `${w}.${f} が必要です`);
       if (!years.has(s?.year)) err(F, `${w}.year は years にある年次にしてください`);
       if (!['前', '後'].includes(s?.term)) err(F, `${w}.term は "前" か "後" にしてください`);
+      if (!isObj(d.ui?.courses) || !isStr(d.ui.courses[s?.course])) err(F, `${w}.course は ui.courses にあるコース（${Object.keys(d.ui?.courses ?? {}).join(' / ')}）にしてください`);
       if (!KINDS.includes(s?.kind)) err(F, `${w}.kind は ${KINDS.join(' / ')} のどれかにしてください`);
       if (!Array.isArray(s?.prereq)) err(F, `${w}.prereq は配列にしてください（前提なしなら []）`);
       else s.prereq.forEach((p) => {
