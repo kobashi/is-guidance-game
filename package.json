@@ -1,0 +1,10 @@
+{
+  "name": "is-guidance-game",
+  "private": true,
+  "description": "情報システム・クエスト（情報システムコース ガイダンス用ゲーム）。ビルド工程なし・依存パッケージなし。",
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check-data.mjs",
+    "serve": "python3 -m http.server 8000"
+  }
+}

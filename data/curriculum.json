@@ -1,0 +1,92 @@
+{
+  "_comment": "ステージ3「履修ダンジョン」のデータ。科目名・年次・前期/後期・必修区分・前提科目は「超履修計画2026」（kobashi/HyperCurriculumTree の app.js、2026年度版 Ver.1.06）から、情報システムコースに関係する専門教育科目を転記した。基礎教育科目と他コースの科目は省略。前提科目がゲームに含まれない科目の場合は省略している（Ｗｅｂプログラミング←メディアデザイン入門、専門演習Ⅰ←基礎演習Ⅱ）。skills（どのスキルが伸びるか）、maxPicks（1年で取れる科目数）、careers（進路・卒業研究の例）はゲーム用に設定した値なので、教員が調整すること。",
+  "ui": {
+    "intro": "4年間の部屋を進んで卒業を目指そう。科目カードをタップして履修すると、スキルが伸びる。必修を取らないと扉は開かない！",
+    "roomTitle": "{year}年次の部屋",
+    "picks": "履修 {n} / {max} 科目",
+    "picksNote": "（ゲーム用に1年で取れる数を決めています）",
+    "full": "この年はもう {max} 科目取っている！ 何かを外してから選ぼう。",
+    "skillsHeading": "スキル",
+    "kind": {
+      "common-required": "共通必修",
+      "course-required": "コース必修",
+      "elective": "選択"
+    },
+    "term": { "前": "前期", "後": "後期" },
+    "needs": "🔒 先に「{names}」が必要",
+    "door": "🚪 {year}年次の部屋へ進む",
+    "graduate": "🎓 卒業の扉を開ける",
+    "doorLocked": "扉が開かない！ 必修の「{names}」を履修していない。",
+    "doorLockedPrereq": "「{name}」を取るには、{year}年次の「{prereq}」が必要だった…",
+    "goBack": "{year}年次の部屋に戻る",
+    "back": "← {year}年次の部屋に戻る",
+    "dropped": "前提の科目が外れたので「{name}」を外した",
+    "result": {
+      "heading": "🎓 卒業おめでとう！",
+      "typeLabel": "あなたのタイプ",
+      "careerLabel": "こんな進路につながるかも",
+      "researchLabel": "卒業研究の例",
+      "note": "スキルの伸び方は、ゲーム用に単純化したものです。実際の履修計画は「超履修計画2026」で確かめよう。",
+      "finish": "クリア！"
+    }
+  },
+  "skills": [
+    { "id": "prog", "label": "プログラミング", "icon": "💻" },
+    { "id": "data", "label": "データ", "icon": "📊" },
+    { "id": "ai", "label": "AI", "icon": "🤖" },
+    { "id": "web", "label": "Web・アプリ", "icon": "🌐" },
+    { "id": "game", "label": "ゲーム・VR", "icon": "🎮" },
+    { "id": "sys", "label": "システム開発", "icon": "🛠️" }
+  ],
+  "years": [
+    { "year": 1, "maxPicks": 8 },
+    { "year": 2, "maxPicks": 8 },
+    { "year": 3, "maxPicks": 8 },
+    { "year": 4, "maxPicks": 2 }
+  ],
+  "subjects": [
+    { "id": "programming-intro", "name": "プログラミング入門", "year": 1, "term": "前", "kind": "common-required", "prereq": [], "skills": { "prog": 2 } },
+    { "id": "info-concepts", "name": "情報学概論", "year": 1, "term": "前", "kind": "common-required", "prereq": [], "skills": { "sys": 1 } },
+    { "id": "media-theory", "name": "情報メディア論", "year": 1, "term": "前", "kind": "common-required", "prereq": [], "skills": { "web": 1 } },
+    { "id": "system-intro", "name": "情報システム入門", "year": 1, "term": "前", "kind": "course-required", "prereq": [], "skills": { "sys": 2 } },
+    { "id": "program-exercise-1", "name": "プログラム演習Ⅰ", "year": 1, "term": "後", "kind": "common-required", "prereq": ["programming-intro"], "skills": { "prog": 2 } },
+    { "id": "it-management", "name": "ＩＴマネジメント", "year": 1, "term": "後", "kind": "common-required", "prereq": ["info-concepts"], "skills": { "sys": 1 } },
+    { "id": "system-basic-theory", "name": "情報基礎理論", "year": 1, "term": "後", "kind": "course-required", "prereq": ["system-intro"], "skills": { "sys": 1, "prog": 1 } },
+    { "id": "info-processing", "name": "情報処理演習", "year": 1, "term": "後", "kind": "elective", "prereq": [], "skills": { "data": 2, "prog": 1 } },
+    { "id": "ethics", "name": "情報社会の倫理と職業", "year": 1, "term": "後", "kind": "elective", "prereq": [], "skills": { "sys": 1 } },
+
+    { "id": "it-strategy", "name": "ＩＴストラテジ", "year": 2, "term": "前", "kind": "common-required", "prereq": ["it-management"], "skills": { "sys": 1 } },
+    { "id": "program-exercise-2", "name": "プログラム演習Ⅱ", "year": 2, "term": "前", "kind": "course-required", "prereq": ["program-exercise-1", "info-processing"], "skills": { "prog": 2 } },
+    { "id": "algorithm", "name": "アルゴリズムとデータ構造", "year": 2, "term": "前", "kind": "course-required", "prereq": ["program-exercise-1", "info-processing"], "skills": { "prog": 2, "data": 1 } },
+    { "id": "web-programming", "name": "Ｗｅｂプログラミング", "year": 2, "term": "前", "kind": "elective", "prereq": [], "skills": { "web": 2, "prog": 1 } },
+    { "id": "software-basic", "name": "ソフトウェア基礎", "year": 2, "term": "前", "kind": "elective", "prereq": ["it-management"], "skills": { "prog": 1, "sys": 1 } },
+    { "id": "info-management", "name": "情報管理", "year": 2, "term": "前", "kind": "elective", "prereq": [], "skills": { "data": 1, "sys": 1 } },
+    { "id": "media-tech", "name": "メディア情報技術", "year": 2, "term": "後", "kind": "course-required", "prereq": ["system-basic-theory"], "skills": { "sys": 1, "web": 1 } },
+    { "id": "network-1", "name": "コンピュータネットワークⅠ", "year": 2, "term": "後", "kind": "course-required", "prereq": [], "skills": { "web": 2 } },
+    { "id": "game-programming", "name": "ゲームプログラミング", "year": 2, "term": "後", "kind": "elective", "prereq": ["algorithm"], "skills": { "game": 3, "prog": 1 } },
+    { "id": "data-science", "name": "データサイエンス", "year": 2, "term": "後", "kind": "elective", "prereq": ["program-exercise-1", "info-processing"], "skills": { "data": 2, "ai": 1 } },
+
+    { "id": "system-development", "name": "システム開発論", "year": 3, "term": "前", "kind": "course-required", "prereq": ["media-tech"], "skills": { "sys": 2 } },
+    { "id": "database", "name": "データベース", "year": 3, "term": "前", "kind": "course-required", "prereq": ["media-tech"], "skills": { "data": 2, "sys": 1 } },
+    { "id": "seminar-1", "name": "専門演習Ⅰ", "year": 3, "term": "前", "kind": "common-required", "prereq": [], "skills": {} },
+    { "id": "program-exercise-3", "name": "プログラム演習Ⅲ", "year": 3, "term": "前", "kind": "elective", "prereq": ["program-exercise-2", "algorithm"], "skills": { "prog": 2 } },
+    { "id": "sound-programming", "name": "サウンドプログラミング", "year": 3, "term": "前", "kind": "elective", "prereq": ["program-exercise-2"], "skills": { "game": 2, "prog": 1 } },
+    { "id": "network-2", "name": "コンピュータネットワークⅡ", "year": 3, "term": "前", "kind": "elective", "prereq": ["network-1"], "skills": { "web": 2 } },
+    { "id": "ai", "name": "人工知能", "year": 3, "term": "前", "kind": "elective", "prereq": ["data-science"], "skills": { "ai": 3 } },
+    { "id": "seminar-2", "name": "専門演習Ⅱ", "year": 3, "term": "後", "kind": "common-required", "prereq": ["seminar-1"], "skills": {} },
+    { "id": "program-exercise-4", "name": "プログラム演習Ⅳ", "year": 3, "term": "後", "kind": "elective", "prereq": ["program-exercise-3"], "skills": { "prog": 2 } },
+    { "id": "knowledge", "name": "知識情報学", "year": 3, "term": "後", "kind": "elective", "prereq": [], "skills": { "ai": 2, "data": 1 } },
+    { "id": "mobile", "name": "モバイル情報論", "year": 3, "term": "後", "kind": "elective", "prereq": ["network-2"], "skills": { "web": 2 } },
+
+    { "id": "graduation-1", "name": "卒業演習Ⅰ", "year": 4, "term": "前", "kind": "common-required", "prereq": ["seminar-2"], "skills": {} },
+    { "id": "graduation-2", "name": "卒業演習Ⅱ", "year": 4, "term": "後", "kind": "common-required", "prereq": ["graduation-1"], "skills": {} }
+  ],
+  "careers": {
+    "prog": { "type": "プログラマー", "career": "ソフトウェアやアプリを作る開発者", "research": "身の回りの「不便」を解決するツールを作る" },
+    "data": { "type": "データアナリスト", "career": "データサイエンティスト、データベースを扱う技術者", "research": "身近なデータを集めて分析し、グラフで見える化する" },
+    "ai": { "type": "AI エンジニア", "career": "AI 技術者", "research": "AI を使って画像や文章を判定するシステムを作る" },
+    "web": { "type": "Web・アプリ クリエイター", "career": "Web サービスやスマホアプリの開発者", "research": "みんなが使える Web アプリを作って公開する" },
+    "game": { "type": "ゲームクリエイター", "career": "ゲームや VR・AR 作品を作るプログラマー", "research": "ゲームや VR 作品を作ってイベントに出品する" },
+    "sys": { "type": "システムエンジニア", "career": "企業や社会のしくみを支えるシステムの設計・開発者", "research": "学校や地域の困りごとを解決するシステムを設計する" }
+  }
+}

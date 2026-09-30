@@ -112,6 +112,7 @@ VRプレゼンアプリ（ローカル開発）と学生用ゲーム「情報シ
 | 情報メディア学科 学科の特長 | https://www.nagoya-bunri.ac.jp/department/media/feature/ |
 | 情報メディア学科4コース適性診断 | https://kobashi.nagoya-bunri.ac.jp/course-recommender/ |
 | 超履修計画2026 | https://kobashi.github.io/HyperCurriculumTree/ |
+| 超履修計画2026 のソース（科目データは app.js） | https://github.com/kobashi/HyperCurriculumTree |
 | コース担当教員の顔で選ぶ | https://kobashi.github.io/HyperCurriculumTree/course-faculty.html |
 | 過去のガイダンス資料（こばし講義用） | https://sites.google.com/site/kobashijiangyiyong/ の「コースガイダンス」 |
 

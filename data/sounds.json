@@ -1,0 +1,28 @@
+{
+  "_comment": "音の設定。defaultEnabled は初めて開いたときの音の ON/OFF（ガイダンス中は false 推奨）。volume は 0〜1。各音は source を \"synth\"（合成音）か \"file\"（音源ファイル、path に assets/audio/ 以下のパス）にする。file のときは volume（0〜1）も指定できる。",
+  "defaultEnabled": false,
+  "volume": {
+    "bgm": 0.5,
+    "sfx": 0.8
+  },
+  "sfx": {
+    "tap": { "source": "synth" },
+    "connect": { "source": "synth" },
+    "correct": { "source": "synth" },
+    "wrong": { "source": "synth" },
+    "combo": { "source": "synth" },
+    "clear": { "source": "synth" },
+    "levelup": { "source": "synth" },
+    "door": { "source": "synth" },
+    "door-locked": { "source": "synth" },
+    "ending": { "source": "synth" }
+  },
+  "bgm": {
+    "title": { "source": "synth" },
+    "stage1": { "source": "synth" },
+    "stage2": { "source": "synth" },
+    "stage3": { "source": "synth" },
+    "stage4": { "source": "synth" },
+    "ending": { "source": "synth" }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "_comment": "ステージ2「バグハンター」の問題（サンプル。公開前に教員が難易度と言語の配分を確認すること）。code は1行ずつ配列に書く（5〜12行）。bugLine はバグのある行の番号（1から数える）。fix は正しく直した行（省略可）。required はクリアに必要な正解数。",
+  "required": 3,
+  "ui": {
+    "intro": "プログラムの結果がおかしい！ バグがあると思う行をタップしよう。",
+    "progress": "正解 {n} / {total}",
+    "storyLabel": "こまったこと",
+    "tapHint": "👆 バグがあると思う行をタップ",
+    "wrong": "そこじゃないみたい…",
+    "hintLabel": "ヒント",
+    "correctHeading": "バグ発見！",
+    "fixLabel": "正しくは",
+    "next": "次の問題へ",
+    "finish": "クリア！"
+  },
+  "questions": [
+    {
+      "id": "js-tax",
+      "lang": "JavaScript",
+      "title": "税込み価格の計算",
+      "story": "1000円の商品なのに「税込み: 100円」と表示される。",
+      "code": [
+        "// 税込み価格を計算する（消費税10%）",
+        "const price = 1000;",
+        "const taxRate = 0.1;",
+        "const total = price * taxRate;",
+        "console.log(\"税込み: \" + total + \"円\");"
+      ],
+      "bugLine": 4,
+      "hint": "表示された「100円」は、何の金額だろう？",
+      "explanation": "price * taxRate は消費税の分（100円）だけ。税込みにするには、元の価格も足す必要がある。",
+      "fix": "const total = price * (1 + taxRate);"
+    },
+    {
+      "id": "py-average",
+      "lang": "Python",
+      "title": "テストの平均点",
+      "story": "4人の平均点なのに、100点をこえる点数が出る。",
+      "code": [
+        "# テストの平均点を計算する",
+        "scores = [80, 65, 90, 75]",
+        "total = 0",
+        "for s in scores:",
+        "    total = total + s",
+        "average = total / 3",
+        "print(\"平均点:\", average)"
+      ],
+      "bugLine": 6,
+      "hint": "合計点を「何人分」で割っているかな？",
+      "explanation": "点数は4人分あるのに、3で割っている。人数は len(scores) で数えると、人数が変わっても正しく計算できる。",
+      "fix": "average = total / len(scores)"
+    },
+    {
+      "id": "js-hp",
+      "lang": "JavaScript",
+      "title": "敵をたおす判定",
+      "story": "3回攻撃して敵の HP がちょうど 0 になったのに、「たおした！」が出ない。",
+      "code": [
+        "// 敵の HP が 0 以下になったら「たおした！」と表示する",
+        "let enemyHp = 30;",
+        "const attack = 10;",
+        "enemyHp = enemyHp - attack;",
+        "enemyHp = enemyHp - attack;",
+        "enemyHp = enemyHp - attack;",
+        "if (enemyHp < 0) {",
+        "  console.log(\"たおした！\");",
+        "}"
+      ],
+      "bugLine": 7,
+      "hint": "HP がちょうど 0 のとき、条件は成り立つ？",
+      "explanation": "< 0 は「0 より小さい」なので、ちょうど 0 のときは当てはまらない。「0 以下」は <= 0 と書く。",
+      "fix": "if (enemyHp <= 0) {"
+    },
+    {
+      "id": "cs-coin",
+      "lang": "C#",
+      "title": "コインのスコア",
+      "story": "コインを5枚取ったのに、スコアが10点のまま。",
+      "code": [
+        "// コインを1枚取るたびに、スコアを10点増やす",
+        "int score = 0;",
+        "int coinCount = 5;",
+        "for (int i = 0; i < coinCount; i++)",
+        "{",
+        "    score = 10;",
+        "}",
+        "Console.WriteLine(\"スコア: \" + score);"
+      ],
+      "bugLine": 6,
+      "hint": "スコアは「増えて」いる？ それとも毎回「上書き」されている？",
+      "explanation": "score = 10 は、スコアを毎回10に置き換えるだけ。今のスコアに10を足すには score = score + 10（または score += 10）と書く。",
+      "fix": "    score = score + 10;"
+    },
+    {
+      "id": "sql-grade",
+      "lang": "SQL",
+      "title": "1年生の一覧",
+      "story": "1年生の名簿を作りたいのに、2年生ばかり表示される。",
+      "code": [
+        "-- 1年生の学生だけを、名前の順に一覧にする",
+        "SELECT name, grade",
+        "FROM students",
+        "WHERE grade = 2",
+        "ORDER BY name;"
+      ],
+      "bugLine": 4,
+      "hint": "WHERE は「どの行を取り出すか」の条件。何年生を取り出している？",
+      "explanation": "WHERE grade = 2 だと2年生を取り出してしまう。1年生なら grade = 1 にする。",
+      "fix": "WHERE grade = 1"
+    },
+    {
+      "id": "py-greeting",
+      "lang": "Python",
+      "title": "あいさつメッセージ",
+      "story": "「こんにちは、ぶんりさん！」と出るはずが、「こんにちは、nameさん！」と表示される。",
+      "code": [
+        "# 名前を使って、あいさつを表示する",
+        "name = \"ぶんり\"",
+        "greeting = \"こんにちは\"",
+        "message = greeting + \"、\" + \"name\" + \"さん！\"",
+        "print(message)"
+      ],
+      "bugLine": 4,
+      "hint": "「name」という文字そのものが表示されているのはなぜ？",
+      "explanation": "\"name\" のように \" \" で囲むと、変数ではなく「name」という文字になる。変数の中身を使うときは \" \" を付けない。",
+      "fix": "message = greeting + \"、\" + name + \"さん！\""
+    },
+    {
+      "id": "cs-move",
+      "lang": "C#",
+      "title": "キャラクターの移動",
+      "story": "右矢印キーを押すと、キャラクターが左に動いてしまう。",
+      "code": [
+        "// 右矢印キーを押している間、キャラクターを右に動かす",
+        "float speed = 5.0f;",
+        "float x = 0.0f;",
+        "if (Input.GetKey(KeyCode.RightArrow))",
+        "{",
+        "    x = x - speed;",
+        "}"
+      ],
+      "bugLine": 6,
+      "hint": "x（横の位置）は、右に行くと増える？ 減る？",
+      "explanation": "右に動かすには x を増やす必要があるのに、speed を引いて減らしている。",
+      "fix": "    x = x + speed;"
+    },
+    {
+      "id": "sql-ranking",
+      "lang": "SQL",
+      "title": "成績上位3人",
+      "story": "点数が高い3人を表示したいのに、点数が低い3人が表示される。",
+      "code": [
+        "-- テストの点数が高い順に、上位3人を表示する",
+        "SELECT name, score",
+        "FROM results",
+        "ORDER BY score ASC",
+        "LIMIT 3;"
+      ],
+      "bugLine": 4,
+      "hint": "ASC は「小さい順（昇順）」という意味。",
+      "explanation": "ORDER BY score ASC は点数の低い順に並べる。高い順にするには DESC（降順）を使う。",
+      "fix": "ORDER BY score DESC"
+    }
+  ]
+}
