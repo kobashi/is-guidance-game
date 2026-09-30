@@ -1099,7 +1099,8 @@ h1, h2, h3, p {
 }
 
 .s1-avatar-box {
-  height: 128px;
+  height: 138px;
+  margin-top: 8px;
   aspect-ratio: 3 / 4;
 }
 
@@ -1109,32 +1110,46 @@ h1, h2, h3, p {
   overflow: visible;
 }
 
-.s1-avatar line,
-.s1-avatar .av-head > circle:first-child {
-  stroke: #8a90b8;
-  stroke-width: 9;
-  stroke-linecap: round;
-  fill: #11142e;
-  transition: stroke 0.4s;
-}
+/* アイドルのキャラクター（スカートはゆりの花。停止中は灰色で目を閉じている） */
+.s1-avatar .av-skin { fill: #ffe1cc; }
+.s1-avatar .av-arm-skin { fill: none; stroke: #ffe1cc; stroke-width: 6; stroke-linecap: round; }
+.s1-avatar .av-hair { fill: #6b4336; }
+.s1-avatar .av-top { fill: #ff6fae; }
+.s1-avatar .av-belt { fill: #4fc28a; }
+.s1-avatar .av-bow path,
+.s1-avatar .av-bow circle { fill: #fff; }
+.s1-avatar .av-sleeve { fill: #fff; stroke: #ffb3d4; stroke-width: 1.4; }
+.s1-avatar .av-petal { fill: #fff; stroke: #f48fbf; stroke-width: 1.6; stroke-linejoin: round; }
+.s1-avatar .av-petal-back { fill: #ffe3f0; }
+.s1-avatar .av-vein { fill: none; stroke: #f8b6d3; stroke-width: 1.2; stroke-linecap: round; }
+.s1-avatar .av-boot { fill: #ff6fae; }
+.s1-avatar .av-ribbon path { fill: #ff6fae; }
+.s1-avatar .av-lily ellipse { fill: #fff; stroke: #f48fbf; stroke-width: 0.8; }
+.s1-avatar .av-lily-center { fill: #ffb800; }
+.s1-avatar .av-mic-handle { fill: none; stroke: #3a3550; stroke-width: 3; stroke-linecap: round; }
+.s1-avatar .av-mic { fill: #ffd23f; stroke: #3a3550; stroke-width: 1.4; }
+.s1-avatar .av-mic-line { fill: none; stroke: #b88a00; stroke-width: 0.9; }
+.s1-avatar .av-eye { fill: #2b2230; transform-box: fill-box; transform-origin: center; transform: scaleY(0.25); transition: transform 0.2s; }
+.s1-avatar .av-eye-hi { fill: #fff; opacity: 0; transition: opacity 0.2s; }
+.s1-avatar .av-blush { fill: #ff9ec4; opacity: 0.85; }
+.s1-avatar .av-mouth { fill: none; stroke: #2b2230; stroke-width: 1.5; stroke-linecap: round; }
 
-.s1-avatar .av-sensor {
-  fill: #555b7c;
-  stroke: none;
-  transition: fill 0.4s;
+.s1-avatar .av-body {
+  filter: grayscale(0.85) brightness(0.75);
+  transition: filter 0.4s;
 }
 
 /* 停止中：うなだれている */
 .s1-avatar .av-head {
   transform: translateY(4px) rotate(18deg);
-  transform-origin: 60px 46px;
+  transform-origin: 60px 58px;
   transition: transform 0.4s;
 }
 
-.s1-avatar .av-arm-l { transform-origin: 60px 58px; }
-.s1-avatar .av-arm-r { transform-origin: 60px 58px; }
-.s1-avatar .av-leg-l,
-.s1-avatar .av-leg-r { transform-origin: 60px 96px; }
+.s1-avatar .av-arm-l { transform-origin: 47px 64px; }
+.s1-avatar .av-arm-r { transform-origin: 73px 64px; }
+.s1-avatar .av-leg-l { transform-origin: 55px 116px; }
+.s1-avatar .av-leg-r { transform-origin: 65px 116px; }
 .s1-avatar .av-body { transform-origin: 60px 150px; }
 
 .s1-status {
@@ -1156,13 +1171,16 @@ h1, h2, h3, p {
   color: var(--accent-3);
 }
 
-.s1-screen.is-live .s1-avatar line,
-.s1-screen.is-live .s1-avatar .av-head > circle:first-child {
-  stroke: #fff;
+.s1-screen.is-live .s1-avatar .av-body {
+  filter: none;
 }
 
-.s1-screen.is-live .s1-avatar .av-sensor {
-  fill: #ffd23f;
+.s1-screen.is-live .s1-avatar .av-eye {
+  transform: none;
+}
+
+.s1-screen.is-live .s1-avatar .av-eye-hi {
+  opacity: 1;
 }
 
 .s1-screen.is-live .av-head {
@@ -1179,8 +1197,8 @@ h1, h2, h3, p {
 @keyframes av-bounce { to { transform: translateY(-8px); } }
 @keyframes av-head { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
 @keyframes av-arm-l { from { transform: rotate(40deg); } to { transform: rotate(130deg); } }
-@keyframes av-arm-r { from { transform: rotate(-130deg); } to { transform: rotate(-40deg); } }
-@keyframes av-leg { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+@keyframes av-arm-r { from { transform: rotate(-95deg); } to { transform: rotate(-80deg); } }
+@keyframes av-leg { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
 .s1-intro {
   font-size: 0.98rem;
@@ -1432,10 +1450,17 @@ h1, h2, h3, p {
   animation: av-collapse 0.6s cubic-bezier(0.5, 0, 0.9, 0.5) both;
 }
 
+/* 配信事故：しょんぼり顔（口を逆さに） */
+.s1-screen.is-broken .av-mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleY(-1);
+}
+
 @keyframes av-collapse {
   0% { transform: none; }
   40% { transform: rotate(-8deg); }
-  100% { transform: translate(18px, 6px) rotate(82deg); }
+  100% { transform: translate(-14px, -30px) rotate(80deg); }
 }
 
 @keyframes s1-alert {
