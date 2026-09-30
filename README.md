@@ -13,14 +13,20 @@
 
 ## 公開手順（GitHub Pages）
 
-1. GitHub のリポジトリページで **Settings → Pages** を開く
-2. **Build and deployment** の Source を **Deploy from a branch** にする
-3. Branch を **main**、フォルダを **/ (root)** にして **Save**
-4. 数分後、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開される（Settings → Pages に URL が表示される）
+main に push（プルリクエストのマージを含む）すると、GitHub Actions（`.github/workflows/pages.yml`）が
+`data/` の JSON を確認してから、自動で GitHub Pages に公開します。
 
+**最初の1回だけ**、次の設定が必要です。
+
+1. GitHub のリポジトリページで **Settings → Pages** を開く
+2. **Build and deployment** の Source を **GitHub Actions** にする
+3. 以後は main への push で自動的に公開される。設定より前の push で公開されていないときは、**Actions** タブ →「Pages に公開」→ **Run workflow** で手動実行する
+4. 数分後、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開される（Actions の実行結果と Settings → Pages に URL が表示される）
+
+- JSON に間違いがあると「data の JSON を確認」が失敗し、**公開されません**（前の版が表示されたまま）。Actions タブで赤くなった実行を開くと、どのファイルの何が問題かが表示されます。
+- プルリクエストでは JSON の確認だけが行われ、公開はされません。
 - main にマージした内容がそのまま公開されます。ガイダンス当日までは URL を配らないでください。
 - すべて相対パスで書いてあるので、リポジトリ名を変えても動きます。
-- `.nojekyll` は GitHub Pages の Jekyll 処理を止めるためのファイルです（消さないでください）。
 
 ## 手元での確認
 
