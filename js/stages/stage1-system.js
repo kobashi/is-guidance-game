@@ -4,28 +4,47 @@
 // 全部つながってアバターが動いたら、「部品を1つ外してみよう」。どれを外しても配信事故で止まる。
 // データは data/system.json（parts は正しい順に書く）。
 
-// アバター：ゆりの花をモチーフにしたキャラクター（6枚の花びらの頭、つぼみの体、葉っぱの腕）
+// アバター：アイドル衣装の女の子。スカートは逆さにしたゆりの花（名古屋文理大学の校章のゆりをモチーフに）
+// 顔は点の目・小さな口・ほっぺだけのシンプルな顔
 const AVATAR_SVG = `
 <svg class="s1-avatar" viewBox="0 0 120 160" role="img" aria-hidden="true">
   <g class="av-body">
-    <g class="av-leg av-leg-l"><rect class="av-stem" x="48" y="114" width="6" height="28" rx="3" /><ellipse class="av-foot" cx="49" cy="144" rx="9" ry="5" /></g>
-    <g class="av-leg av-leg-r"><rect class="av-stem" x="66" y="114" width="6" height="28" rx="3" /><ellipse class="av-foot" cx="71" cy="144" rx="9" ry="5" /></g>
-    <path class="av-torso" d="M60 66 C 42 76, 40 110, 60 122 C 80 110, 78 76, 60 66 Z" />
-    <path class="av-torso-line" d="M60 76 L 60 112" />
-    <g class="av-arm av-arm-l"><path class="av-leaf" d="M57 86 C 46 76, 30 80, 22 94 C 36 100, 50 98, 57 86 Z" /></g>
-    <g class="av-arm av-arm-r"><path class="av-leaf" d="M63 86 C 74 76, 90 80, 98 94 C 84 100, 70 98, 63 86 Z" /></g>
-    <g class="av-head">
-      ${[0, 1, 2, 3, 4, 5].map((k) => `<ellipse class="av-petal" cx="60" cy="26" rx="10.5" ry="17" transform="rotate(${k * 60 + 30} 60 44)" />`).join('')}
-      <g class="av-stamen">
-        <path d="M55 32 Q 48 18 44 6" /><path d="M60 30 L 60 1" /><path d="M65 32 Q 72 18 76 6" />
-        <circle cx="44" cy="5" r="3.2" /><circle cx="60" cy="0" r="3.2" /><circle cx="76" cy="5" r="3.2" />
+    <g class="av-leg av-leg-l"><rect class="av-skin" x="52" y="114" width="6" height="26" rx="3" /><rect class="av-boot" x="49" y="136" width="11" height="9" rx="4" /></g>
+    <g class="av-leg av-leg-r"><rect class="av-skin" x="62" y="114" width="6" height="26" rx="3" /><rect class="av-boot" x="60" y="136" width="11" height="9" rx="4" /></g>
+    <path class="av-petal av-petal-back" d="M54 90 C 42 98, 34 108, 32 120 L 60 112 Z" />
+    <path class="av-petal av-petal-back" d="M66 90 C 78 98, 86 108, 88 120 L 60 112 Z" />
+    <path class="av-petal" d="M52 88 C 40 96, 30 108, 25 121 C 33 116, 42 118, 49 123 C 49 110, 51 98, 56 90 Z" />
+    <path class="av-petal" d="M68 88 C 80 96, 90 108, 95 121 C 87 116, 78 118, 71 123 C 71 110, 69 98, 64 90 Z" />
+    <path class="av-petal" d="M50 88 C 45 104, 50 118, 60 127 C 70 118, 75 104, 70 88 Z" />
+    <path class="av-vein" d="M60 94 L 60 118 M 44 100 L 34 115 M 76 100 L 86 115" />
+    <rect class="av-top" x="48" y="58" width="24" height="32" rx="9" />
+    <rect class="av-belt" x="47" y="85" width="26" height="6" rx="3" />
+    <g class="av-bow"><path d="M60 64 L 52 59 L 52 69 Z" /><path d="M60 64 L 68 59 L 68 69 Z" /><circle cx="60" cy="64" r="2.4" /></g>
+    <g class="av-arm av-arm-l"><path class="av-arm-skin" d="M46 66 L 36 84" /><circle class="av-skin" cx="35" cy="86" r="3.6" /><circle class="av-sleeve" cx="47" cy="63" r="6.5" /></g>
+    <g class="av-head"><g transform="translate(60 44) scale(1.18) translate(-60 -44)">
+      <path class="av-hair" d="M38 30 C 22 36, 20 62, 29 76 C 34 62, 38 50, 43 42 Z" />
+      <path class="av-hair" d="M82 30 C 98 36, 100 62, 91 76 C 86 62, 82 50, 77 42 Z" />
+      <circle class="av-hair" cx="60" cy="36" r="24" />
+      <ellipse class="av-skin" cx="60" cy="40" rx="20" ry="18" />
+      <path class="av-hair" d="M37 38 C 36 16, 84 16, 83 38 C 78 30, 72 30, 68 25 C 64 31, 56 31, 52 25 C 48 30, 42 30, 37 38 Z" />
+      <g class="av-ribbon"><path d="M38 30 L 31 25 L 32 35 Z" /><path d="M38 30 L 44 23 L 45 33 Z" /></g>
+      <g class="av-ribbon"><path d="M82 30 L 89 25 L 88 35 Z" /><path d="M82 30 L 76 23 L 75 33 Z" /></g>
+      <g class="av-lily">
+        ${[0, 1, 2, 3, 4, 5].map((k) => `<ellipse cx="74" cy="15.5" rx="2.6" ry="4.8" transform="rotate(${k * 60} 74 20)" />`).join('')}
+        <circle class="av-lily-center" cx="74" cy="20" r="1.8" />
       </g>
-      <circle class="av-face" cx="60" cy="46" r="16.5" />
-      <ellipse class="av-eye" cx="54" cy="44.5" rx="2.6" ry="3.5" />
-      <ellipse class="av-eye" cx="66" cy="44.5" rx="2.6" ry="3.5" />
-      <ellipse class="av-blush" cx="48.5" cy="51" rx="3.6" ry="2.1" />
-      <ellipse class="av-blush" cx="71.5" cy="51" rx="3.6" ry="2.1" />
-      <path class="av-mouth" d="M56 51.5 Q 60 56 64 51.5" />
+      <ellipse class="av-eye" cx="52.5" cy="42" rx="2.4" ry="3.1" />
+      <ellipse class="av-eye" cx="67.5" cy="42" rx="2.4" ry="3.1" />
+      <circle class="av-eye-hi" cx="53.3" cy="40.8" r="0.9" />
+      <circle class="av-eye-hi" cx="68.3" cy="40.8" r="0.9" />
+      <ellipse class="av-blush" cx="46.5" cy="47.5" rx="3.6" ry="2" />
+      <ellipse class="av-blush" cx="73.5" cy="47.5" rx="3.6" ry="2" />
+      <path class="av-mouth" d="M58 48.5 Q 60 51 62 48.5" />
+    </g></g>
+    <g class="av-arm av-arm-r">
+      <path class="av-arm-skin" d="M74 66 L 84 84" />
+      <path class="av-mic-handle" d="M85 87 L 90 73" /><circle class="av-mic" cx="91" cy="69" r="5.5" /><path class="av-mic-line" d="M87.5 67 L 94.5 71 M 88 70.5 L 93 73" />
+      <circle class="av-skin" cx="85" cy="86" r="3.6" /><circle class="av-sleeve" cx="73" cy="63" r="6.5" />
     </g>
   </g>
 </svg>`;

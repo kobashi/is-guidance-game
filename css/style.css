@@ -1099,8 +1099,8 @@ h1, h2, h3, p {
 }
 
 .s1-avatar-box {
-  height: 116px;
-  margin-top: 12px;
+  height: 138px;
+  margin-top: 8px;
   aspect-ratio: 3 / 4;
 }
 
@@ -1110,30 +1110,29 @@ h1, h2, h3, p {
   overflow: visible;
 }
 
-/* ゆりの花のキャラクター（停止中はしおれて目を閉じている） */
-.s1-avatar .av-petal {
-  fill: #fff;
-  stroke: #f4a6c6;
-  stroke-width: 1.6;
-}
-
-.s1-avatar .av-stamen path {
-  fill: none;
-  stroke: #e6a800;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-}
-
-.s1-avatar .av-stamen circle { fill: #ffb800; }
-.s1-avatar .av-face { fill: #fff6e8; stroke: #f4a6c6; stroke-width: 1.2; }
-.s1-avatar .av-eye { fill: #3a2a3f; transform-box: fill-box; transform-origin: center; transform: scaleY(0.25); transition: transform 0.2s; }
-.s1-avatar .av-blush { fill: #ff9ec4; opacity: 0.8; }
-.s1-avatar .av-mouth { fill: none; stroke: #3a2a3f; stroke-width: 1.6; stroke-linecap: round; }
-.s1-avatar .av-torso { fill: #4fc28a; }
-.s1-avatar .av-torso-line { fill: none; stroke: #2f9e6a; stroke-width: 2; stroke-linecap: round; }
-.s1-avatar .av-leaf { fill: #6fd69e; stroke: #2f9e6a; stroke-width: 1.4; }
-.s1-avatar .av-stem { fill: #3fae78; }
-.s1-avatar .av-foot { fill: #2f9e6a; }
+/* アイドルのキャラクター（スカートはゆりの花。停止中は灰色で目を閉じている） */
+.s1-avatar .av-skin { fill: #ffe1cc; }
+.s1-avatar .av-arm-skin { fill: none; stroke: #ffe1cc; stroke-width: 6; stroke-linecap: round; }
+.s1-avatar .av-hair { fill: #6b4336; }
+.s1-avatar .av-top { fill: #ff6fae; }
+.s1-avatar .av-belt { fill: #4fc28a; }
+.s1-avatar .av-bow path,
+.s1-avatar .av-bow circle { fill: #fff; }
+.s1-avatar .av-sleeve { fill: #fff; stroke: #ffb3d4; stroke-width: 1.4; }
+.s1-avatar .av-petal { fill: #fff; stroke: #f48fbf; stroke-width: 1.6; stroke-linejoin: round; }
+.s1-avatar .av-petal-back { fill: #ffe3f0; }
+.s1-avatar .av-vein { fill: none; stroke: #f8b6d3; stroke-width: 1.2; stroke-linecap: round; }
+.s1-avatar .av-boot { fill: #ff6fae; }
+.s1-avatar .av-ribbon path { fill: #ff6fae; }
+.s1-avatar .av-lily ellipse { fill: #fff; stroke: #f48fbf; stroke-width: 0.8; }
+.s1-avatar .av-lily-center { fill: #ffb800; }
+.s1-avatar .av-mic-handle { fill: none; stroke: #3a3550; stroke-width: 3; stroke-linecap: round; }
+.s1-avatar .av-mic { fill: #ffd23f; stroke: #3a3550; stroke-width: 1.4; }
+.s1-avatar .av-mic-line { fill: none; stroke: #b88a00; stroke-width: 0.9; }
+.s1-avatar .av-eye { fill: #2b2230; transform-box: fill-box; transform-origin: center; transform: scaleY(0.25); transition: transform 0.2s; }
+.s1-avatar .av-eye-hi { fill: #fff; opacity: 0; transition: opacity 0.2s; }
+.s1-avatar .av-blush { fill: #ff9ec4; opacity: 0.85; }
+.s1-avatar .av-mouth { fill: none; stroke: #2b2230; stroke-width: 1.5; stroke-linecap: round; }
 
 .s1-avatar .av-body {
   filter: grayscale(0.85) brightness(0.75);
@@ -1143,14 +1142,14 @@ h1, h2, h3, p {
 /* 停止中：うなだれている */
 .s1-avatar .av-head {
   transform: translateY(4px) rotate(18deg);
-  transform-origin: 60px 66px;
+  transform-origin: 60px 58px;
   transition: transform 0.4s;
 }
 
-.s1-avatar .av-arm-l { transform-origin: 58px 86px; }
-.s1-avatar .av-arm-r { transform-origin: 62px 86px; }
-.s1-avatar .av-leg-l,
-.s1-avatar .av-leg-r { transform-origin: 60px 116px; }
+.s1-avatar .av-arm-l { transform-origin: 47px 64px; }
+.s1-avatar .av-arm-r { transform-origin: 73px 64px; }
+.s1-avatar .av-leg-l { transform-origin: 55px 116px; }
+.s1-avatar .av-leg-r { transform-origin: 65px 116px; }
 .s1-avatar .av-body { transform-origin: 60px 150px; }
 
 .s1-status {
@@ -1180,6 +1179,10 @@ h1, h2, h3, p {
   transform: none;
 }
 
+.s1-screen.is-live .s1-avatar .av-eye-hi {
+  opacity: 1;
+}
+
 .s1-screen.is-live .av-head {
   transform: none;
   animation: av-head 0.6s ease-in-out infinite alternate;
@@ -1193,9 +1196,9 @@ h1, h2, h3, p {
 
 @keyframes av-bounce { to { transform: translateY(-8px); } }
 @keyframes av-head { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
-@keyframes av-arm-l { from { transform: rotate(-10deg); } to { transform: rotate(60deg); } }
-@keyframes av-arm-r { from { transform: rotate(-60deg); } to { transform: rotate(10deg); } }
-@keyframes av-leg { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+@keyframes av-arm-l { from { transform: rotate(40deg); } to { transform: rotate(130deg); } }
+@keyframes av-arm-r { from { transform: rotate(-95deg); } to { transform: rotate(-80deg); } }
+@keyframes av-leg { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
 .s1-intro {
   font-size: 0.98rem;
@@ -1457,7 +1460,7 @@ h1, h2, h3, p {
 @keyframes av-collapse {
   0% { transform: none; }
   40% { transform: rotate(-8deg); }
-  100% { transform: translate(-8px, -18px) rotate(80deg); }
+  100% { transform: translate(-14px, -30px) rotate(80deg); }
 }
 
 @keyframes s1-alert {
